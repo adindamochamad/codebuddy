@@ -1,0 +1,7 @@
+# OCR — paket besar; pasang setelah inti: pip install -r requirements-ocr.txt
+-r requirements.txt
+
+paddlepaddle>=3.0.0
+paddleocr>=2.8.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0

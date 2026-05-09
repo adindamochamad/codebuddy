@@ -1,0 +1,458 @@
+{
+  "metadata": {
+    "versi": 1,
+    "deskripsi": "Dataset fine-tuning untuk tutor koding Bahasa Indonesia — CodeBuddy",
+    "total_contoh": 55,
+    "kategori": {
+      "syntax_error": 15,
+      "runtime_error": 15,
+      "logic_error": 10,
+      "code_quality": 10,
+      "ocr_correction": 5
+    },
+    "bahasa_penjelasan": "Bahasa Indonesia",
+    "target_level": "pemula (SMP/SMA)"
+  },
+  "data": [
+    {
+      "id": "syn_001",
+      "kategori": "syntax_error",
+      "sub_kategori": "typo_keyword",
+      "instruction": "Analisis kode Python ini dan jelaskan errornya dalam Bahasa Indonesia",
+      "input": "prin('Halo Dunia')",
+      "output": "❌ Error: Nama fungsi salah ketik (typo)\n\nKamu menulis 'prin' tapi fungsi yang benar adalah 'print' — ada huruf 't' yang hilang di akhir.\n\nIbarat kamu memanggil nama temanmu tapi salah sebut — komputer juga tidak mengenali perintah yang tidak tepat!\n\nKode yang benar:\nprint('Halo Dunia')\n\n💡 Tips: Kalau komputer bilang 'NameError: name prin is not defined', itu biasanya tanda ada typo pada nama fungsi atau variabel."
+    },
+    {
+      "id": "syn_002",
+      "kategori": "syntax_error",
+      "sub_kategori": "typo_keyword",
+      "instruction": "Temukan dan perbaiki kesalahan dalam kode Python ini",
+      "input": "deff hitung_luas(panjang, lebar):\n    return panjang * lebar",
+      "output": "❌ Error: Kata kunci 'def' salah ketik menjadi 'deff'\n\nDalam Python, untuk membuat fungsi kita menggunakan kata kunci 'def' (dari kata 'define' = mendefinisikan), bukan 'deff'. Satu huruf 'f' sudah cukup!\n\nKode yang benar:\ndef hitung_luas(panjang, lebar):\n    return panjang * lebar\n\n💡 Kata kunci Python yang perlu diingat: def, if, else, for, while, return, import — semuanya ditulis dengan huruf kecil dan ejaan yang tepat."
+    },
+    {
+      "id": "syn_003",
+      "kategori": "syntax_error",
+      "sub_kategori": "missing_colon",
+      "instruction": "Kode ini menghasilkan SyntaxError. Jelaskan masalahnya dan berikan solusinya",
+      "input": "nilai = 85\nif nilai >= 75\n    print('Lulus!')\nelse\n    print('Remedial')",
+      "output": "❌ Error: Tanda titik dua (:) hilang setelah 'if' dan 'else'\n\nDalam Python, setiap blok kode (if, else, for, while, def) HARUS diakhiri dengan tanda titik dua ':'. Tanpa titik dua, Python tidak tahu bahwa baris berikutnya adalah isi dari blok tersebut.\n\nBayangkan titik dua seperti kata 'maka' dalam bahasa Indonesia:\n'Jika nilai >= 75, MAKA cetak Lulus'\n\nKode yang benar:\nnilai = 85\nif nilai >= 75:\n    print('Lulus!')\nelse:\n    print('Remedial')\n\n💡 Tips: Setiap kali kamu menulis if, else, elif, for, while, def, atau class — ingat untuk selalu menambahkan ':' di akhir baris!"
+    },
+    {
+      "id": "syn_004",
+      "kategori": "syntax_error",
+      "sub_kategori": "missing_colon",
+      "instruction": "Perbaiki kode Python ini yang menghasilkan SyntaxError",
+      "input": "def salam(nama)\n    print('Halo,', nama)\n    print('Selamat datang!')",
+      "output": "❌ Error: Tanda titik dua (:) hilang setelah definisi fungsi\n\nSaat membuat fungsi dengan 'def', kamu HARUS menambahkan ':' setelah tanda kurung penutup.\n\nKode yang benar:\ndef salam(nama):\n    print('Halo,', nama)\n    print('Selamat datang!')\n\n✅ Sekarang kamu bisa memanggil fungsinya:\nsalam('Budi')  # Output: Halo, Budi"
+    },
+    {
+      "id": "syn_005",
+      "kategori": "syntax_error",
+      "sub_kategori": "indentation_error",
+      "instruction": "Kode Python ini menghasilkan IndentationError. Jelaskan dan perbaiki",
+      "input": "for i in range(5):\nprint(i)",
+      "output": "❌ Error: IndentationError — baris dalam loop tidak diberi indentasi\n\nPython menggunakan indentasi (spasi/tab di awal baris) untuk menentukan blok kode mana yang 'berada di dalam' loop, fungsi, atau kondisi.\n\nIbarat tulisan di buku: isi paragraf harus menjorok ke dalam untuk menunjukkan ia bagian dari paragraf tersebut.\n\nKode yang benar:\nfor i in range(5):\n    print(i)  # 4 spasi di depan!\n\nOutput yang dihasilkan:\n0\n1\n2\n3\n4\n\n💡 Aturan Python: Gunakan 4 spasi untuk setiap level indentasi. Jangan campur tab dan spasi!"
+    },
+    {
+      "id": "syn_006",
+      "kategori": "syntax_error",
+      "sub_kategori": "indentation_error",
+      "instruction": "Temukan kesalahan indentasi dalam kode Python ini",
+      "input": "def cek_nilai(nilai):\n    if nilai >= 90:\n        print('A')\n      elif nilai >= 80:\n        print('B')\n    else:\n        print('C')",
+      "output": "❌ Error: IndentationError — indentasi 'elif' tidak konsisten\n\n'elif' harus sejajar dengan 'if' yang berpasangan dengannya. Di kode ini, 'if' menggunakan 4 spasi tapi 'elif' menggunakan 6 spasi — tidak sejajar!\n\nKode yang benar:\ndef cek_nilai(nilai):\n    if nilai >= 90:\n        print('A')\n    elif nilai >= 80:\n        print('B')\n    else:\n        print('C')\n\n💡 Tips: if, elif, dan else yang berpasangan harus selalu ditulis dengan jumlah spasi yang SAMA di depannya."
+    },
+    {
+      "id": "syn_007",
+      "kategori": "syntax_error",
+      "sub_kategori": "missing_parenthesis",
+      "instruction": "Perbaiki kode Python yang menghasilkan SyntaxError berikut",
+      "input": "print('Nama:', nama\nprint('Usia:', usia)",
+      "output": "❌ Error: Tanda kurung penutup ')' hilang pada baris pertama\n\nSetiap tanda kurung buka '(' harus selalu dipasangkan dengan tanda kurung tutup ')'. Di sini baris pertama tidak memiliki penutup.\n\nIbarat tanda baca: kurung itu seperti pasangan — tidak bisa hanya satu!\n\nKode yang benar:\nprint('Nama:', nama)\nprint('Usia:', usia)\n\n💡 Tips: Saat kamu dapat SyntaxError dan merasa tidak ada yang salah, coba hitung jumlah '(' dan ')' — harus selalu sama!"
+    },
+    {
+      "id": "syn_008",
+      "kategori": "syntax_error",
+      "sub_kategori": "quote_mismatch",
+      "instruction": "Kode ini menghasilkan SyntaxError karena masalah tanda kutip. Jelaskan dan perbaiki",
+      "input": "pesan = 'Selamat Ulang Tahun, Budi!\"\nprint(pesan)",
+      "output": "❌ Error: Tanda kutip tidak cocok (quote mismatch)\n\nString dimulai dengan tanda kutip tunggal (') tapi diakhiri dengan tanda kutip ganda (\"). Python mengharuskan tanda kutip pembuka dan penutup harus SAMA jenisnya.\n\nKamu boleh pilih salah satu:\n✅ Pilihan 1 — kutip tunggal:\npesan = 'Selamat Ulang Tahun, Budi!'\n\n✅ Pilihan 2 — kutip ganda:\npesan = \"Selamat Ulang Tahun, Budi!\"\n\nprint(pesan)\n\n💡 Tips: Gunakan kutip ganda jika teksmu mengandung tanda apostrof, misalnya: \"Budi's party\""
+    },
+    {
+      "id": "syn_009",
+      "kategori": "syntax_error",
+      "sub_kategori": "typo_keyword",
+      "instruction": "Analisis dan perbaiki error berikut",
+      "input": "angka = [1, 2, 3, 4, 5]\nFor i in angka:\n    print(i)",
+      "output": "❌ Error: Kata kunci 'For' ditulis dengan huruf kapital\n\nSemua kata kunci (keyword) Python ditulis dengan huruf KECIL. 'For' dengan 'F' besar akan dianggap sebagai nama variabel, bukan perintah loop.\n\nKode yang benar:\nangka = [1, 2, 3, 4, 5]\nfor i in angka:\n    print(i)\n\n💡 Kata kunci Python yang sering salah kapitalisasi:\n- for (bukan For/FOR)\n- if (bukan If/IF)\n- while (bukan While)\n- True / False / None (ini justru harus huruf kapital di awal!)"
+    },
+    {
+      "id": "syn_010",
+      "kategori": "syntax_error",
+      "sub_kategori": "missing_parenthesis",
+      "instruction": "Perbaiki kesalahan sintaks dalam kode Python ini",
+      "input": "hasil = int(input'Masukkan angka: ')\nprint('Dua kali lipat:', hasil * 2)",
+      "output": "❌ Error: Tanda kurung '(' hilang setelah 'input'\n\nFungsi 'input()' memerlukan tanda kurung untuk menampung argumennya. Tanpa tanda kurung, Python mengira 'input' adalah variabel yang dikalikan dengan string.\n\nKode yang benar:\nhasil = int(input('Masukkan angka: '))\nprint('Dua kali lipat:', hasil * 2)\n\n✅ Cara membacanya: input('...') mengambil teks dari pengguna, lalu int(...) mengubahnya menjadi angka bulat."
+    },
+    {
+      "id": "syn_011",
+      "kategori": "syntax_error",
+      "sub_kategori": "wrong_assignment",
+      "instruction": "Kode ini menghasilkan SyntaxError. Temukan masalahnya",
+      "input": "if x = 10:\n    print('Sepuluh')",
+      "output": "❌ Error: Menggunakan '=' (assignment) bukan '==' (perbandingan) di dalam if\n\nDalam Python:\n- '=' digunakan untuk MEMBERI NILAI ke variabel: x = 10\n- '==' digunakan untuk MEMBANDINGKAN dua nilai: if x == 10\n\nIni seperti perbedaan 'menjadi' vs 'sama dengan' dalam bahasa Indonesia.\n\nKode yang benar:\nx = 10  # beri nilai dulu di luar if\nif x == 10:\n    print('Sepuluh')\n\n💡 Cara ingat: '==' punya dua tanda sama karena ia sedang 'membandingkan dua hal'."
+    },
+    {
+      "id": "syn_012",
+      "kategori": "syntax_error",
+      "sub_kategori": "indentation_error",
+      "instruction": "Mengapa kode ini error? Perbaiki!",
+      "input": "def hitung():\nhasil = 10 + 5\n    return hasil",
+      "output": "❌ Error: IndentationError — isi fungsi tidak diindentasi\n\nSemua baris di dalam fungsi harus diindentasi (4 spasi). 'hasil = 10 + 5' ditulis tanpa indentasi, jadi Python menganggap baris itu bukan bagian dari fungsi.\n\nKode yang benar:\ndef hitung():\n    hasil = 10 + 5\n    return hasil\n\nprint(hitung())  # Output: 15\n\n💡 Cara mudah ingat: semua yang ada 'di dalam' fungsi harus menjorok ke dalam (4 spasi)."
+    },
+    {
+      "id": "syn_013",
+      "kategori": "syntax_error",
+      "sub_kategori": "typo_keyword",
+      "instruction": "Temukan dan perbaiki typo pada kode Python ini",
+      "input": "nilai = 70\nif nilai >= 75:\n    print('Lulus')\nelese:\n    print('Belum lulus')",
+      "output": "❌ Error: Kata kunci 'else' salah ketik menjadi 'elese'\n\nKata kunci yang benar adalah 'else', bukan 'elese'. Satu huruf ekstra sudah cukup membuat Python bingung!\n\nKode yang benar:\nnilai = 70\nif nilai >= 75:\n    print('Lulus')\nelse:\n    print('Belum lulus')\n\nOutput: Belum lulus\n\n💡 Tips: Saat dapat NameError atau SyntaxError yang aneh, periksa apakah ada typo pada kata kunci seperti else, elif, return, import, dll."
+    },
+    {
+      "id": "syn_014",
+      "kategori": "syntax_error",
+      "sub_kategori": "missing_colon",
+      "instruction": "Perbaiki error pada kode loop Python ini",
+      "input": "i = 0\nwhile i < 5\n    print(i)\n    i += 1",
+      "output": "❌ Error: Tanda titik dua ':' hilang setelah kondisi 'while'\n\nSeperti 'if' dan 'for', 'while' juga memerlukan titik dua di akhir baris kondisinya.\n\nKode yang benar:\ni = 0\nwhile i < 5:\n    print(i)\n    i += 1\n\nOutput:\n0\n1\n2\n3\n4\n\n⚠️ Perhatikan juga: 'i += 1' sangat penting! Tanpanya, loop akan berjalan selamanya (infinite loop) karena nilai i tidak pernah berubah."
+    },
+    {
+      "id": "syn_015",
+      "kategori": "syntax_error",
+      "sub_kategori": "quote_mismatch",
+      "instruction": "Identifikasi dan perbaiki kesalahan string pada kode ini",
+      "input": "kota = \"Yogyakarta\nprint('Kota favorit:', kota)",
+      "output": "❌ Error: String tidak ditutup — tanda kutip penutup hilang\n\nString 'Yogyakarta' dibuka dengan tanda kutip ganda (\") tapi tidak pernah ditutup. Python akan terus membaca sampai menemukan penutupnya, atau error jika tidak ditemukan.\n\nKode yang benar:\nkota = \"Yogyakarta\"\nprint('Kota favorit:', kota)\n\nOutput: Kota favorit: Yogyakarta\n\n💡 Tips: Bayangkan tanda kutip seperti tanda kurung — setiap yang dibuka harus ditutup!"
+    },
+    {
+      "id": "run_001",
+      "kategori": "runtime_error",
+      "sub_kategori": "NameError",
+      "instruction": "Kode ini menghasilkan NameError. Jelaskan penyebabnya dan cara memperbaikinya",
+      "input": "print('Halo,', nmaa)\nnama = 'Siti'",
+      "output": "❌ Error: NameError — variabel 'nmaa' tidak ditemukan (typo!)\n\nAda dua masalah di sini:\n1. 'nmaa' adalah typo dari 'nama'\n2. Variabel 'nama' didefinisikan SETELAH dipakai — Python membaca kode dari atas ke bawah!\n\nIbarat resep masak: kamu tidak bisa menambahkan garam sebelum garam itu ada di dapur.\n\nKode yang benar:\nnama = 'Siti'  # definisikan dulu\nprint('Halo,', nama)  # baru gunakan\n\nOutput: Halo, Siti\n\n💡 Aturan penting: Variabel harus DIDEFINISIKAN sebelum DIGUNAKAN, dan penulisannya harus PERSIS SAMA (termasuk huruf besar/kecil)."
+    },
+    {
+      "id": "run_002",
+      "kategori": "runtime_error",
+      "sub_kategori": "NameError",
+      "instruction": "Jelaskan error NameError pada kode ini dan berikan solusinya",
+      "input": "luas = panjang * lebar\npanjang = 10\nlebar = 5\nprint('Luas:', luas)",
+      "output": "❌ Error: NameError — 'panjang' digunakan sebelum didefinisikan\n\nPython membaca dan menjalankan kode dari baris PERTAMA ke TERAKHIR. Variabel 'panjang' dan 'lebar' baru ada di baris 2 dan 3, tapi sudah dipakai di baris 1.\n\nIbarat menghitung uang kembalian sebelum tahu harga barang — tidak bisa!\n\nKode yang benar:\npanjang = 10\nlebar = 5\nluas = panjang * lebar\nprint('Luas:', luas)\n\nOutput: Luas: 50\n\n💡 Tips: Selalu definisikan variabel di ATAS sebelum menggunakannya di BAWAH."
+    },
+    {
+      "id": "run_003",
+      "kategori": "runtime_error",
+      "sub_kategori": "TypeError",
+      "instruction": "Analisis TypeError pada kode berikut",
+      "input": "umur = input('Masukkan umur: ')\ntahun_lahir = 2024 - umur\nprint('Tahun lahir:', tahun_lahir)",
+      "output": "❌ Error: TypeError — tidak bisa mengurangi string dengan angka\n\nFungsi input() SELALU mengembalikan teks (string), bukan angka — meskipun pengguna mengetik angka. Jadi '2024 - \"15\"' tidak valid, seperti mengurangi apel dengan \"limabelas\".\n\nKode yang benar:\numur = int(input('Masukkan umur: '))  # ubah string ke integer\ntahun_lahir = 2024 - umur\nprint('Tahun lahir:', tahun_lahir)\n\nContoh input: 15\nOutput: Tahun lahir: 2009\n\n💡 Aturan penting:\n- int(input(...)) → mengubah teks ke angka bulat\n- float(input(...)) → mengubah teks ke angka desimal\nSelalu konversi hasil input() jika akan digunakan untuk perhitungan!"
+    },
+    {
+      "id": "run_004",
+      "kategori": "runtime_error",
+      "sub_kategori": "TypeError",
+      "instruction": "Mengapa kode ini menghasilkan TypeError? Berikan solusinya",
+      "input": "nilai = 85\npesan = 'Nilaimu adalah: ' + nilai\nprint(pesan)",
+      "output": "❌ Error: TypeError — tidak bisa menggabungkan string dan integer secara langsung\n\nOperator '+' antara string dan angka tidak diizinkan. Ibarat mencoba menjumlahkan kata 'lima' dengan angka 5 — perlu penyesuaian dulu.\n\nAda dua cara memperbaikinya:\n\n✅ Cara 1 — Ubah angka ke string dengan str():\npesan = 'Nilaimu adalah: ' + str(nilai)\nprint(pesan)\n\n✅ Cara 2 — Gunakan f-string (lebih modern dan mudah):\npesan = f'Nilaimu adalah: {nilai}'\nprint(pesan)\n\n✅ Cara 3 — Gunakan print langsung:\nprint('Nilaimu adalah:', nilai)\n\nOutput: Nilaimu adalah: 85"
+    },
+    {
+      "id": "run_005",
+      "kategori": "runtime_error",
+      "sub_kategori": "IndexError",
+      "instruction": "Jelaskan IndexError pada kode ini dan cara mengatasinya",
+      "input": "buah = ['apel', 'mangga', 'jeruk']\nprint(buah[3])",
+      "output": "❌ Error: IndexError — indeks 3 di luar jangkauan list\n\nList 'buah' memiliki 3 elemen, tapi indeks di Python dimulai dari 0 (nol), bukan 1. Jadi:\n- buah[0] = 'apel'\n- buah[1] = 'mangga'\n- buah[2] = 'jeruk'\n- buah[3] = ❌ TIDAK ADA!\n\nIbarat lantai gedung: lantai pertama = lantai 0. Kalau gedungnya cuma 3 lantai (0,1,2), tidak ada lantai ke-3!\n\nKode yang benar:\nbuah = ['apel', 'mangga', 'jeruk']\nprint(buah[2])  # Output: jeruk\n\n# Atau akses elemen terakhir dengan -1:\nprint(buah[-1])  # Output: jeruk\n\n💡 Tips: Indeks valid untuk list dengan N elemen adalah 0 sampai N-1."
+    },
+    {
+      "id": "run_006",
+      "kategori": "runtime_error",
+      "sub_kategori": "IndexError",
+      "instruction": "Kode ini akan error saat dijalankan. Temukan masalahnya",
+      "input": "nilai_siswa = [85, 90, 78, 92, 88]\nfor i in range(6):\n    print(f'Siswa {i+1}: {nilai_siswa[i]}')",
+      "output": "❌ Error: IndexError — loop berjalan 6 kali tapi list hanya punya 5 elemen\n\nrange(6) menghasilkan angka 0,1,2,3,4,5 — tapi indeks list hanya valid dari 0 sampai 4 (5 elemen = indeks 0-4). Saat i=5, nilai_siswa[5] tidak ada!\n\nKode yang benar:\nnilai_siswa = [85, 90, 78, 92, 88]\nfor i in range(len(nilai_siswa)):  # otomatis sesuai panjang list\n    print(f'Siswa {i+1}: {nilai_siswa[i]}')\n\nAtau lebih Pythonic:\nfor nomor, nilai in enumerate(nilai_siswa, start=1):\n    print(f'Siswa {nomor}: {nilai}')\n\n💡 Tips: Gunakan len() atau enumerate() agar loop otomatis sesuai ukuran list!"
+    },
+    {
+      "id": "run_007",
+      "kategori": "runtime_error",
+      "sub_kategori": "ZeroDivisionError",
+      "instruction": "Analisis dan perbaiki ZeroDivisionError pada kode ini",
+      "input": "nilai_total = 0\njumlah_siswa = 0\nrata_rata = nilai_total / jumlah_siswa\nprint('Rata-rata:', rata_rata)",
+      "output": "❌ Error: ZeroDivisionError — tidak bisa membagi dengan nol\n\nMatematika dan Python sama-sama melarang pembagian dengan nol karena hasilnya tidak terdefinisi. Ini seperti membagi kue untuk 0 orang — tidak masuk akal!\n\nKode yang benar (dengan pengecekan):\nnilai_total = 0\njumlah_siswa = 0\n\nif jumlah_siswa > 0:\n    rata_rata = nilai_total / jumlah_siswa\n    print('Rata-rata:', rata_rata)\nelse:\n    print('Tidak ada siswa untuk dihitung rata-ratanya.')\n\n💡 Selalu periksa pembagi sebelum melakukan operasi pembagian, terutama jika nilainya berasal dari input atau database!"
+    },
+    {
+      "id": "run_008",
+      "kategori": "runtime_error",
+      "sub_kategori": "ZeroDivisionError",
+      "instruction": "Tambahkan penanganan error yang tepat untuk kode ini",
+      "input": "angka = int(input('Masukkan angka: '))\npembagi = int(input('Masukkan pembagi: '))\nhasil = angka / pembagi\nprint(f'{angka} / {pembagi} = {hasil}')",
+      "output": "✅ Kode ini benar secara struktur, tapi bisa crash jika pengguna memasukkan 0 sebagai pembagi.\n\nKode yang lebih aman:\nangka = int(input('Masukkan angka: '))\npembagi = int(input('Masukkan pembagi: '))\n\nif pembagi == 0:\n    print('❌ Error: Tidak bisa membagi dengan nol!')\nelse:\n    hasil = angka / pembagi\n    print(f'{angka} / {pembagi} = {hasil}')\n\nContoh penggunaan:\nInput: 10, 2 → Output: 10 / 2 = 5.0\nInput: 10, 0 → Output: ❌ Error: Tidak bisa membagi dengan nol!\n\n💡 Selalu validasi input dari pengguna sebelum digunakan dalam operasi matematis!"
+    },
+    {
+      "id": "run_009",
+      "kategori": "runtime_error",
+      "sub_kategori": "KeyError",
+      "instruction": "Jelaskan KeyError pada kode Python ini",
+      "input": "data_siswa = {\n    'nama': 'Budi',\n    'nilai': 85,\n    'kelas': '7A'\n}\nprint(data_siswa['alamat'])",
+      "output": "❌ Error: KeyError — kunci 'alamat' tidak ada di dictionary\n\nDictionary seperti buku telepon: kamu hanya bisa mencari nama yang SUDAH TERDAFTAR. Kunci 'alamat' tidak ada dalam dictionary ini, hanya 'nama', 'nilai', dan 'kelas'.\n\nCara 1 — Akses langsung (pastikan kunci ada):\nprint(data_siswa['nama'])    # Output: Budi\nprint(data_siswa['nilai'])   # Output: 85\n\nCara 2 — Gunakan .get() dengan nilai default (aman!):\nprint(data_siswa.get('alamat', 'Alamat tidak tersedia'))\n# Output: Alamat tidak tersedia\n\nCara 3 — Cek dulu sebelum akses:\nif 'alamat' in data_siswa:\n    print(data_siswa['alamat'])\nelse:\n    print('Data alamat belum diisi')\n\n💡 Saran: Gunakan .get() untuk akses dictionary yang lebih aman!"
+    },
+    {
+      "id": "run_010",
+      "kategori": "runtime_error",
+      "sub_kategori": "KeyError",
+      "instruction": "Perbaiki kode yang mengakses dictionary dengan aman",
+      "input": "inventaris = {'apel': 50, 'mangga': 30, 'jeruk': 25}\nbuah_dicari = input('Cari buah: ')\nstok = inventaris[buah_dicari]\nprint(f'Stok {buah_dicari}: {stok} buah')",
+      "output": "⚠️ Masalah: Jika pengguna mencari buah yang tidak ada (misal 'durian'), kode ini akan crash dengan KeyError.\n\nKode yang diperbaiki:\ninventaris = {'apel': 50, 'mangga': 30, 'jeruk': 25}\nbuah_dicari = input('Cari buah: ').lower()  # .lower() agar tidak case-sensitive\n\nstok = inventaris.get(buah_dicari)\nif stok is not None:\n    print(f'Stok {buah_dicari}: {stok} buah')\nelse:\n    print(f\"Buah '{buah_dicari}' tidak ada dalam inventaris.\")\n    print(f'Buah yang tersedia: {\", \".join(inventaris.keys())}')\n\n💡 Menggunakan .get() adalah kebiasaan baik saat mengakses dictionary dari input pengguna!"
+    },
+    {
+      "id": "run_011",
+      "kategori": "runtime_error",
+      "sub_kategori": "TypeError",
+      "instruction": "Analisis TypeError pada operasi list ini",
+      "input": "angka = [3, 1, 4, 1, 5, 9]\nhasil = angka + 2\nprint(hasil)",
+      "output": "❌ Error: TypeError — tidak bisa menjumlahkan list dengan integer\n\nOperator '+' pada list digunakan untuk MENGGABUNGKAN dua list, bukan menambahkan angka. Kamu tidak bisa menjumlahkan 'kotak berisi benda' dengan 'satu angka'.\n\nJika ingin menambahkan elemen ke list:\n✅ Cara 1 — Tambah satu elemen:\nangka = [3, 1, 4, 1, 5, 9]\nangka.append(2)  # tambah 2 di akhir\nprint(angka)  # Output: [3, 1, 4, 1, 5, 9, 2]\n\n✅ Cara 2 — Gabungkan dua list:\nangka = [3, 1, 4, 1, 5, 9]\nhasil = angka + [2]\nprint(hasil)  # Output: [3, 1, 4, 1, 5, 9, 2]\n\n✅ Cara 3 — Tambah ke semua elemen:\nhasil = [x + 2 for x in angka]\nprint(hasil)  # Output: [5, 3, 6, 3, 7, 11]"
+    },
+    {
+      "id": "run_012",
+      "kategori": "runtime_error",
+      "sub_kategori": "AttributeError",
+      "instruction": "Jelaskan AttributeError pada kode ini",
+      "input": "angka = 42\nhasil = angka.upper()\nprint(hasil)",
+      "output": "❌ Error: AttributeError — angka (integer) tidak punya method upper()\n\nMethod .upper() adalah milik STRING (teks), bukan INTEGER (angka). Ini seperti meminta buku matematika untuk berteriak — tidak masuk akal!\n\nJika kamu ingin mengubah ke huruf kapital, pastikan variabelnya adalah string:\n✅ Contoh yang benar:\nteks = 'halo dunia'\nhasil = teks.upper()\nprint(hasil)  # Output: HALO DUNIA\n\nJika angka ingin diformat:\nangka = 42\nprint(str(angka))      # '42' (sebagai string)\nprint(f'{angka:05d}')  # '00042' (dengan padding nol)\n\n💡 Tips: Sebelum menggunakan method, pastikan tipe datanya sesuai:\n- str: .upper(), .lower(), .split(), .strip(), .replace()\n- list: .append(), .remove(), .sort(), .reverse()\n- int/float: tidak punya method seperti di atas"
+    },
+    {
+      "id": "run_013",
+      "kategori": "runtime_error",
+      "sub_kategori": "RecursionError",
+      "instruction": "Mengapa kode rekursif ini menghasilkan RecursionError?",
+      "input": "def hitung_mundur(n):\n    print(n)\n    hitung_mundur(n - 1)\n\nhitung_mundur(5)",
+      "output": "❌ Error: RecursionError — fungsi memanggil dirinya tanpa kondisi berhenti\n\nFungsi rekursif ibarat cermin yang saling berhadapan — pantulannya tidak pernah berhenti! Python membatasi kedalaman rekursi untuk mencegah program kehabisan memori.\n\nSolusi: tambahkan 'base case' (kondisi berhenti):\ndef hitung_mundur(n):\n    if n <= 0:     # BASE CASE: berhenti saat n sudah 0 atau kurang\n        print('Selesai!')\n        return\n    print(n)\n    hitung_mundur(n - 1)  # RECURSIVE CASE: panggil dengan n yang lebih kecil\n\nhitung_mundur(5)\n# Output: 5, 4, 3, 2, 1, Selesai!\n\n💡 Aturan rekursi:\n1. Harus ada BASE CASE (kapan berhenti)\n2. Setiap panggilan harus menuju ke base case"
+    },
+    {
+      "id": "run_014",
+      "kategori": "runtime_error",
+      "sub_kategori": "NameError",
+      "instruction": "Jelaskan mengapa variabel tidak bisa diakses dari luar fungsi",
+      "input": "def buat_pesan():\n    pesan = 'Halo dari dalam fungsi!'\n\nbuat_pesan()\nprint(pesan)",
+      "output": "❌ Error: NameError — 'pesan' tidak bisa diakses di luar fungsi\n\nVariabel yang dibuat di DALAM fungsi hanya hidup selama fungsi berjalan. Setelah fungsi selesai, variabel itu 'hilang'. Ini disebut 'scope' (ruang lingkup) variabel.\n\nIbarat catatan yang ditulis di papan tulis saat pelajaran — ketika pelajaran selesai dan papan dihapus, catatannya hilang.\n\nSolusi 1 — Gunakan return:\ndef buat_pesan():\n    pesan = 'Halo dari dalam fungsi!'\n    return pesan  # 'kembalikan' nilai ke luar\n\nhasil = buat_pesan()\nprint(hasil)  # Output: Halo dari dalam fungsi!\n\nSolusi 2 — Definisikan variabel di luar:\npesan = ''  # variabel global\ndef buat_pesan():\n    global pesan  # deklarasikan pakai global\n    pesan = 'Halo dari dalam fungsi!'\n\nbuat_pesan()\nprint(pesan)  # Output: Halo dari dalam fungsi!\n\n💡 Best practice: Lebih baik gunakan return daripada variabel global!"
+    },
+    {
+      "id": "run_015",
+      "kategori": "runtime_error",
+      "sub_kategori": "TypeError",
+      "instruction": "Analisis error saat memanggil fungsi dengan argumen salah",
+      "input": "def sapa(nama, kota):\n    print(f'Halo {nama} dari {kota}!')\n\nsapa('Budi')",
+      "output": "❌ Error: TypeError — fungsi membutuhkan 2 argumen tapi hanya diberikan 1\n\nFungsi 'sapa' memiliki 2 parameter: 'nama' dan 'kota'. Keduanya wajib diisi saat memanggil fungsi.\n\nCara 1 — Isi semua argumen:\nsapa('Budi', 'Jakarta')  # Output: Halo Budi dari Jakarta!\n\nCara 2 — Beri nilai default pada parameter:\ndef sapa(nama, kota='Indonesia'):\n    print(f'Halo {nama} dari {kota}!')\n\nsapa('Budi')            # Output: Halo Budi dari Indonesia!\nsapa('Siti', 'Bandung') # Output: Halo Siti dari Bandung!\n\nCara 3 — Gunakan keyword argument:\nsapa(kota='Surabaya', nama='Ahmad')  # Output: Halo Ahmad dari Surabaya!\n\n💡 Tips: Baca pesan TypeError dengan teliti — Python biasanya menyebutkan berapa argumen yang dibutuhkan dan berapa yang diberikan."
+    },
+    {
+      "id": "log_001",
+      "kategori": "logic_error",
+      "sub_kategori": "wrong_operator",
+      "instruction": "Kode ini tidak error tapi hasilnya salah. Temukan masalah logikanya",
+      "input": "# Cek apakah seseorang boleh masuk bioskop (usia >= 17)\nusia = 15\nif usia > 17:\n    print('Boleh masuk')\nelse:\n    print('Tidak boleh masuk')",
+      "output": "⚠️ Logic Error: Menggunakan '>' (lebih dari) seharusnya '>=' (lebih dari atau sama dengan)\n\nDengan '> 17', seseorang berusia tepat 17 tahun tidak akan 'Boleh masuk' padahal aturannya usia >= 17.\n\nContoh masalah:\n- usia = 17 → seharusnya 'Boleh masuk' tapi kode mengatakan 'Tidak boleh masuk'\n- usia = 18 → benar, 'Boleh masuk'\n\nKode yang benar:\nusia = 15\nif usia >= 17:  # 17 atau lebih\n    print('Boleh masuk')\nelse:\n    print('Tidak boleh masuk')\n\n💡 Bedanya:\n- '>' berarti LEBIH DARI (tidak termasuk angka itu sendiri)\n- '>=' berarti LEBIH DARI ATAU SAMA DENGAN (termasuk angka itu sendiri)"
+    },
+    {
+      "id": "log_002",
+      "kategori": "logic_error",
+      "sub_kategori": "off_by_one",
+      "instruction": "Temukan logic error pada loop ini (off-by-one error)",
+      "input": "# Cetak angka 1 sampai 10\nfor i in range(10):\n    print(i)",
+      "output": "⚠️ Logic Error: range(10) menghasilkan 0-9, bukan 1-10\n\nHasil kode yang salah:\n0, 1, 2, 3, 4, 5, 6, 7, 8, 9\n\nrange() dalam Python:\n- range(10) → 0, 1, 2, ..., 9 (dimulai dari 0, berhenti sebelum 10)\n- range(1, 11) → 1, 2, 3, ..., 10 (dimulai dari 1, berhenti sebelum 11)\n\nKode yang benar:\n# Cara 1:\nfor i in range(1, 11):\n    print(i)\n\n# Cara 2:\nfor i in range(10):\n    print(i + 1)\n\nOutput: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\n💡 Cara mudah ingat range(a, b): dimulai dari a, berhenti SEBELUM b."
+    },
+    {
+      "id": "log_003",
+      "kategori": "logic_error",
+      "sub_kategori": "missing_return",
+      "instruction": "Fungsi ini selalu menghasilkan None. Apa yang salah?",
+      "input": "def tambah(a, b):\n    hasil = a + b\n    # lupa return!\n\nprint(tambah(3, 4))",
+      "output": "⚠️ Logic Error: Fungsi tidak mengembalikan nilai (lupa return)\n\nOutput yang salah: None\n\nFungsi 'tambah' menghitung 'hasil' dengan benar, tapi tidak pernah MENGEMBALIKANNYA ke pemanggil. Tanpa 'return', Python otomatis mengembalikan 'None' (tidak ada nilai).\n\nIbarat kamu sudah memasak nasi tapi tidak menyajikannya ke meja — yang lapar tidak mendapat apapun!\n\nKode yang benar:\ndef tambah(a, b):\n    hasil = a + b\n    return hasil  # kembalikan nilai!\n\nprint(tambah(3, 4))  # Output: 7\n\nAtau lebih singkat:\ndef tambah(a, b):\n    return a + b\n\nprint(tambah(3, 4))  # Output: 7\n\n💡 Ingat: Jika fungsi seharusnya menghasilkan nilai, SELALU tulis 'return'!"
+    },
+    {
+      "id": "log_004",
+      "kategori": "logic_error",
+      "sub_kategori": "wrong_condition",
+      "instruction": "Loop ini tidak berjalan sama sekali. Mengapa?",
+      "input": "angka = 10\nwhile angka > 10:\n    print(angka)\n    angka -= 1\nprint('Selesai')",
+      "output": "⚠️ Logic Error: Kondisi 'angka > 10' langsung False karena angka = 10\n\nKarena angka dimulai dari 10, dan kondisinya adalah 'angka > 10' (lebih dari 10), loop langsung tidak terpenuhi dan tidak pernah berjalan.\n\n10 > 10 → False → loop tidak jalan!\n\nJika ingin loop berjalan dari 10 ke 1:\nangka = 10\nwhile angka >= 1:  # atau while angka > 0\n    print(angka)\n    angka -= 1\nprint('Selesai')\n\nOutput: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, Selesai\n\n💡 Saat loop tidak berjalan sama sekali, cek kondisinya — apakah sudah True dari awal?"
+    },
+    {
+      "id": "log_005",
+      "kategori": "logic_error",
+      "sub_kategori": "infinite_loop",
+      "instruction": "Kode ini akan berjalan selamanya (infinite loop). Temukan masalahnya",
+      "input": "i = 1\nwhile i <= 5:\n    print(i)\n    # lupa i += 1!",
+      "output": "⚠️ Logic Error: Infinite loop — nilai 'i' tidak pernah berubah!\n\nVariabel 'i' selalu bernilai 1, kondisi '1 <= 5' selalu True, jadi loop tidak pernah berhenti. Program akan terus mencetak angka 1 sampai kamu menghentikannya paksa (Ctrl+C).\n\nKode yang benar:\ni = 1\nwhile i <= 5:\n    print(i)\n    i += 1  # WAJIB! tambah i setiap putaran\nprint('Selesai')\n\nOutput: 1, 2, 3, 4, 5, Selesai\n\n⚠️ Tanda-tanda infinite loop:\n- Program tidak berhenti\n- Output terus berulang\n- CPU laptop/komputer panas\n\nHentikan dengan: Ctrl+C di terminal"
+    },
+    {
+      "id": "log_006",
+      "kategori": "logic_error",
+      "sub_kategori": "wrong_operator",
+      "instruction": "Fungsi ini harusnya mengecek apakah bilangan genap, tapi hasilnya selalu salah",
+      "input": "def adalah_genap(n):\n    if n % 2 == 1:  # salah!\n        return True\n    return False\n\nprint(adalah_genap(4))  # seharusnya True",
+      "output": "⚠️ Logic Error: Kondisi terbalik — memeriksa sisa ganjil bukan genap\n\n'n % 2 == 1' berarti 'sisa pembagian sama dengan 1', yang terjadi pada bilangan GANJIL, bukan genap!\n\nLogika yang benar:\n- Bilangan genap: n % 2 == 0 (sisa pembagian 2 adalah 0)\n- Bilangan ganjil: n % 2 == 1 (sisa pembagian 2 adalah 1)\n\nKode yang benar:\ndef adalah_genap(n):\n    return n % 2 == 0  # lebih singkat dan benar!\n\nprint(adalah_genap(4))   # True ✅\nprint(adalah_genap(7))   # False ✅\nprint(adalah_genap(0))   # True ✅\n\n💡 Operator modulo '%' sangat berguna:\n- n % 2 → sisa bagi 2 (0 atau 1)\n- n % 10 → digit terakhir bilangan\n- n % 3 == 0 → cek apakah habis dibagi 3"
+    },
+    {
+      "id": "log_007",
+      "kategori": "logic_error",
+      "sub_kategori": "wrong_variable",
+      "instruction": "Fungsi ini tidak menukar nilai dengan benar. Jelaskan dan perbaiki",
+      "input": "def tukar(a, b):\n    a = b\n    b = a\n    return a, b\n\nx, y = 10, 20\nx, y = tukar(x, y)\nprint(x, y)  # seharusnya 20 10",
+      "output": "⚠️ Logic Error: Nilai 'a' sudah tertimpa sebelum disimpan!\n\nUrutan eksekusi yang salah:\n1. a = b → a menjadi 20 (nilai a yang lama (10) HILANG!)\n2. b = a → b menjadi 20 (mengambil a yang sudah berubah)\nHasil: a=20, b=20 — SALAH!\n\nSolusi 1 — Gunakan variabel sementara:\ndef tukar(a, b):\n    temp = a  # simpan nilai a dulu\n    a = b\n    b = temp\n    return a, b\n\nSolusi 2 — Cara Pythonic (lebih elegan):\ndef tukar(a, b):\n    return b, a  # Python bisa tukar sekaligus!\n\nSolusi 3 — Langsung tanpa fungsi:\nx, y = 10, 20\nx, y = y, x  # Python swap langsung!\nprint(x, y)  # Output: 20 10 ✅"
+    },
+    {
+      "id": "log_008",
+      "kategori": "logic_error",
+      "sub_kategori": "wrong_accumulator",
+      "instruction": "Program penjumlahan ini selalu menghasilkan angka terakhir saja. Apa masalahnya?",
+      "input": "angka = [10, 20, 30, 40, 50]\nfor n in angka:\n    total = 0      # direset setiap iterasi!\n    total += n\nprint('Total:', total)",
+      "output": "⚠️ Logic Error: Variabel 'total' direset ke 0 di setiap iterasi loop!\n\nApa yang terjadi:\n- Iterasi 1: total=0, total+=10 → total=10\n- Iterasi 2: total=0 (reset!), total+=20 → total=20\n- Iterasi 3: total=0 (reset!), total+=30 → total=30\n- ... dan seterusnya\nHasil akhir: 50 (hanya angka terakhir!)\n\nKode yang benar:\nangka = [10, 20, 30, 40, 50]\ntotal = 0  # inisialisasi di LUAR loop\nfor n in angka:\n    total += n\nprint('Total:', total)  # Output: Total: 150\n\nAtau gunakan fungsi bawaan:\nprint('Total:', sum(angka))  # Output: Total: 150\n\n💡 Aturan: Variabel akumulator (penampung) harus diinisialisasi di LUAR loop!"
+    },
+    {
+      "id": "log_009",
+      "kategori": "logic_error",
+      "sub_kategori": "wrong_comparison",
+      "instruction": "Fungsi nilai huruf ini memberikan hasil yang salah. Temukan logic error-nya",
+      "input": "def nilai_huruf(nilai):\n    if nilai >= 60:\n        return 'D'\n    elif nilai >= 70:\n        return 'C'\n    elif nilai >= 80:\n        return 'B'\n    elif nilai >= 90:\n        return 'A'\n    else:\n        return 'E'",
+      "output": "⚠️ Logic Error: Urutan kondisi if-elif terbalik!\n\nDengan urutan ini:\n- nilai=95 → masuk 'if nilai >= 60' → return 'D' (SALAH! harusnya A)\n- nilai=85 → masuk 'if nilai >= 60' → return 'D' (SALAH! harusnya B)\n\nKondisi pertama sudah menangkap SEMUA nilai >= 60, jadi elif berikutnya tidak pernah dicek!\n\nKode yang benar (dari nilai tertinggi ke terendah):\ndef nilai_huruf(nilai):\n    if nilai >= 90:\n        return 'A'\n    elif nilai >= 80:\n        return 'B'\n    elif nilai >= 70:\n        return 'C'\n    elif nilai >= 60:\n        return 'D'\n    else:\n        return 'E'\n\nprint(nilai_huruf(95))  # A ✅\nprint(nilai_huruf(85))  # B ✅\nprint(nilai_huruf(55))  # E ✅\n\n💡 Aturan: Selalu tulis kondisi dari yang PALING SPESIFIK/KETAT ke yang PALING UMUM."
+    },
+    {
+      "id": "log_010",
+      "kategori": "logic_error",
+      "sub_kategori": "string_number_confusion",
+      "instruction": "Program ini seharusnya menjumlahkan dua angka tapi hasilnya aneh",
+      "input": "angka1 = input('Angka pertama: ')\nangka2 = input('Angka kedua: ')\nhasil = angka1 + angka2\nprint('Hasil:', hasil)",
+      "output": "⚠️ Logic Error: input() mengembalikan STRING, bukan angka — '+' akan menggabungkan teks!\n\nContoh output yang salah:\nAngka pertama: 15\nAngka kedua: 20\nHasil: 1520  ← string '15' + '20' = '1520' (disambung, bukan dijumlah!)\n\nIbarat menggabungkan dua potongan kertas bertuliskan angka — hasilnya tulisan, bukan perhitungan!\n\nKode yang benar:\nangka1 = int(input('Angka pertama: '))\nangka2 = int(input('Angka kedua: '))\nhasil = angka1 + angka2\nprint('Hasil:', hasil)\n\nContoh output yang benar:\nAngka pertama: 15\nAngka kedua: 20\nHasil: 35 ✅\n\nUntuk angka desimal:\nangka1 = float(input('Angka pertama: '))\n\n💡 Selalu konversi input() dengan int() atau float() untuk operasi matematika!"
+    },
+    {
+      "id": "qual_001",
+      "kategori": "code_quality",
+      "sub_kategori": "variable_naming",
+      "instruction": "Kode ini berjalan dengan benar tapi sulit dibaca. Bagaimana cara memperbaiki kualitasnya?",
+      "input": "a = 100\nb = 0.1\nc = a * b\nprint(c)",
+      "output": "✅ Kode berjalan benar tapi nama variabel tidak bermakna.\n\nMasalah: 'a', 'b', 'c' tidak menjelaskan apa yang disimpan. Orang lain (atau kamu sendiri 1 bulan kemudian) akan bingung!\n\nKode yang lebih baik:\nharga_barang = 100\npersentase_diskon = 0.1   # 10%\njumlah_diskon = harga_barang * persentase_diskon\nprint(f'Diskon: Rp {jumlah_diskon:,.0f}')\n# Output: Diskon: Rp 10\n\nAtau dengan konteks lebih lengkap:\nharga_barang = 100_000  # Rp 100.000\npersentase_diskon = 0.1  # 10%\njumlah_diskon = harga_barang * persentase_diskon\nharga_akhir = harga_barang - jumlah_diskon\nprint(f'Harga setelah diskon: Rp {harga_akhir:,.0f}')\n# Output: Harga setelah diskon: Rp 90.000\n\n💡 Aturan penamaan variabel yang baik:\n- Gunakan nama yang DESKRIPTIF (menjelaskan isinya)\n- Gunakan snake_case untuk Python (kata_dipisah_garis_bawah)\n- Hindari singkatan yang tidak jelas (kecuali yang sudah umum seperti 'i' untuk loop)"
+    },
+    {
+      "id": "qual_002",
+      "kategori": "code_quality",
+      "sub_kategori": "magic_numbers",
+      "instruction": "Kode ini mengandung 'magic numbers'. Jelaskan masalahnya dan cara memperbaikinya",
+      "input": "luas_lapangan = 40 * 20\nkeliling = 2 * (40 + 20)\nprint('Luas:', luas_lapangan)\nprint('Keliling:', keliling)",
+      "output": "⚠️ Code Smell: Magic Numbers — angka muncul tiba-tiba tanpa penjelasan\n\nApa itu 40 dan 20? Panjang? Lebar? Harga? Orang lain tidak tahu!\n\nKode yang lebih baik — gunakan konstanta bernama:\nPANJANG_LAPANGAN = 40   # meter\nLEBAR_LAPANGAN = 20     # meter\n\nluas_lapangan = PANJANG_LAPANGAN * LEBAR_LAPANGAN\nkeliling = 2 * (PANJANG_LAPANGAN + LEBAR_LAPANGAN)\n\nprint(f'Luas lapangan: {luas_lapangan} m²')\nprint(f'Keliling lapangan: {keliling} m')\n\n💡 Konvensi Python:\n- Konstanta ditulis dengan HURUF_KAPITAL_SEMUA\n- Ini memudahkan perubahan: jika ukuran lapangan berubah, cukup ubah di satu tempat saja!"
+    },
+    {
+      "id": "qual_003",
+      "kategori": "code_quality",
+      "sub_kategori": "code_duplication",
+      "instruction": "Kode ini memiliki banyak pengulangan. Bagaimana cara menyederhanakannya?",
+      "input": "print('=== MENU ===')\nprint('1. Tambah Data')\nprint('2. Lihat Data')\nprint('3. Ubah Data')\nprint('4. Hapus Data')\nprint('5. Keluar')\nprint('============')",
+      "output": "✅ Kode ini bekerja tapi ada cara yang lebih rapi menggunakan list dan loop.\n\nCara lebih baik:\nmenu_items = [\n    '1. Tambah Data',\n    '2. Lihat Data',\n    '3. Ubah Data',\n    '4. Hapus Data',\n    '5. Keluar',\n]\n\nprint('=== MENU ===')\nfor item in menu_items:\n    print(item)\nprint('============')\n\nKeuntungan:\n- Mudah menambah atau menghapus menu (cukup edit list)\n- Kode lebih pendek dan mudah dibaca\n- Tidak perlu ubah banyak baris jika ada perubahan\n\n💡 Prinsip DRY (Don't Repeat Yourself): Jika kamu menyalin-tempel kode yang hampir sama, itu tanda perlu disederhanakan!"
+    },
+    {
+      "id": "qual_004",
+      "kategori": "code_quality",
+      "sub_kategori": "function_decomposition",
+      "instruction": "Kode ini terlalu panjang dan melakukan terlalu banyak hal. Bagaimana memperbaikinya?",
+      "input": "nama = input('Nama: ')\nusia = int(input('Usia: '))\nnilai_mtk = float(input('Nilai MTK: '))\nnilai_ipa = float(input('Nilai IPA: '))\nnilai_ips = float(input('Nilai IPS: '))\nrata_rata = (nilai_mtk + nilai_ipa + nilai_ips) / 3\nif rata_rata >= 75:\n    status = 'Lulus'\nelse:\n    status = 'Remedial'\nprint(f'Siswa: {nama} ({usia} tahun)')\nprint(f'Rata-rata: {rata_rata:.2f}')\nprint(f'Status: {status}')",
+      "output": "✅ Kode benar, tapi bisa dibuat lebih terstruktur dengan fungsi-fungsi kecil.\n\nKode yang lebih terorganisir:\ndef ambil_data_siswa():\n    nama = input('Nama: ')\n    usia = int(input('Usia: '))\n    return nama, usia\n\ndef ambil_nilai():\n    mtk = float(input('Nilai MTK: '))\n    ipa = float(input('Nilai IPA: '))\n    ips = float(input('Nilai IPS: '))\n    return mtk, ipa, ips\n\ndef hitung_rata_rata(nilai_list):\n    return sum(nilai_list) / len(nilai_list)\n\ndef tentukan_status(rata_rata, batas_lulus=75):\n    return 'Lulus' if rata_rata >= batas_lulus else 'Remedial'\n\ndef tampilkan_hasil(nama, usia, rata_rata, status):\n    print(f'Siswa: {nama} ({usia} tahun)')\n    print(f'Rata-rata: {rata_rata:.2f}')\n    print(f'Status: {status}')\n\n# Program utama\nnama, usia = ambil_data_siswa()\nnilai_mtk, nilai_ipa, nilai_ips = ambil_nilai()\nrata_rata = hitung_rata_rata([nilai_mtk, nilai_ipa, nilai_ips])\nstatus = tentukan_status(rata_rata)\ntampilkan_hasil(nama, usia, rata_rata, status)\n\n💡 Prinsip Single Responsibility: Setiap fungsi hanya bertanggung jawab untuk SATU hal!"
+    },
+    {
+      "id": "qual_005",
+      "kategori": "code_quality",
+      "sub_kategori": "comments",
+      "instruction": "Kode ini tidak memiliki komentar. Tambahkan komentar yang membantu",
+      "input": "def fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)",
+      "output": "✅ Kode benar tapi tidak ada penjelasan apa yang dilakukan.\n\nVersi dengan komentar yang informatif:\ndef fib(n):\n    \"\"\"\n    Menghitung bilangan Fibonacci ke-n secara rekursif.\n    \n    Deret Fibonacci: 0, 1, 1, 2, 3, 5, 8, 13, 21, ...\n    Setiap bilangan adalah jumlah dua bilangan sebelumnya.\n    \n    Parameter:\n        n (int): Posisi bilangan dalam deret (mulai dari 0)\n    \n    Returns:\n        int: Bilangan Fibonacci ke-n\n    \n    Contoh:\n        fib(0) → 0\n        fib(1) → 1  \n        fib(6) → 8\n    \"\"\"\n    # Base case: Fibonacci ke-0 adalah 0, ke-1 adalah 1\n    if n <= 1:\n        return n\n    \n    # Recursive case: jumlah dua Fibonacci sebelumnya\n    return fib(n-1) + fib(n-2)\n\n# Cetak 10 bilangan Fibonacci pertama\nfor i in range(10):\n    print(f'fib({i}) = {fib(i)}')\n\n💡 Tips komentar yang baik:\n- Jelaskan MENGAPA, bukan hanya APA\n- Gunakan docstring untuk fungsi\n- Jangan terlalu banyak komentar untuk hal yang sudah jelas"
+    },
+    {
+      "id": "qual_006",
+      "kategori": "code_quality",
+      "sub_kategori": "list_comprehension",
+      "instruction": "Kode ini bisa disederhanakan dengan list comprehension. Tunjukkan caranya",
+      "input": "angka = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\nangka_genap = []\nfor n in angka:\n    if n % 2 == 0:\n        angka_genap.append(n)\nprint(angka_genap)",
+      "output": "✅ Kode benar tapi bisa jauh lebih singkat!\n\nVersi dengan list comprehension (cara Pythonic):\nangka = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\nangka_genap = [n for n in angka if n % 2 == 0]\nprint(angka_genap)  # Output: [2, 4, 6, 8, 10]\n\nDibaca: 'ambil n dari angka, jika n habis dibagi 2'\n\nContoh list comprehension lainnya:\n# Kuadrat semua angka\nkuadrat = [n**2 for n in range(1, 6)]\nprint(kuadrat)  # [1, 4, 9, 16, 25]\n\n# Ubah ke huruf kapital\nnama = ['budi', 'siti', 'ahmad']\nnama_kapital = [n.upper() for n in nama]\nprint(nama_kapital)  # ['BUDI', 'SITI', 'AHMAD']\n\n💡 List comprehension:\n[ekspresi for item in iterable if kondisi]\nLebih cepat dan lebih 'Pythonic' dari loop + append!"
+    },
+    {
+      "id": "qual_007",
+      "kategori": "code_quality",
+      "sub_kategori": "f_string",
+      "instruction": "Tunjukkan cara modern memformat string di Python",
+      "input": "nama = 'Budi'\nusia = 17\nnilai = 92.5\npesan = 'Halo, nama saya ' + nama + '. Usia saya ' + str(usia) + ' tahun. Nilai saya ' + str(nilai) + '.'",
+      "output": "⚠️ Kode benar tapi cara penggabungan string dengan '+' sulit dibaca dan rawan error.\n\nCara modern — gunakan f-string (Python 3.6+):\nnama = 'Budi'\nusia = 17\nnilai = 92.5\n\n# f-string: tambahkan 'f' sebelum kutip, lalu tulis variabel dalam {}\npesan = f'Halo, nama saya {nama}. Usia saya {usia} tahun. Nilai saya {nilai}.'\nprint(pesan)\n\nFormat angka dengan f-string:\nprint(f'Nilai: {nilai:.1f}')        # 1 desimal: 92.5\nprint(f'Nilai: {nilai:.0f}')        # tanpa desimal: 93  \nprint(f'Uang: Rp {100000:,.0f}')   # format ribuan: Rp 100,000\nprint(f'Lebar: {nama:>10}')        # rata kanan lebar 10: '      Budi'\n\n💡 f-string jauh lebih mudah dibaca, lebih cepat, dan mendukung format angka yang fleksibel. Gunakan selalu!"
+    },
+    {
+      "id": "qual_008",
+      "kategori": "code_quality",
+      "sub_kategori": "error_handling",
+      "instruction": "Tambahkan penanganan error yang baik pada kode ini",
+      "input": "angka = int(input('Masukkan angka: '))\nprint('Angka dikali 2:', angka * 2)",
+      "output": "⚠️ Masalah: Jika pengguna mengetik 'abc' atau huruf, kode akan crash dengan ValueError.\n\nKode dengan penanganan error:\n# Cara 1 — Try-except\ntry:\n    angka = int(input('Masukkan angka: '))\n    print('Angka dikali 2:', angka * 2)\nexcept ValueError:\n    print('❌ Error: Tolong masukkan angka, bukan huruf!')\n\n# Cara 2 — Loop sampai input valid\nwhile True:\n    teks = input('Masukkan angka: ')\n    if teks.isdigit():\n        angka = int(teks)\n        break\n    print('⚠️ Input tidak valid. Coba lagi!')\n\nprint('Angka dikali 2:', angka * 2)\n\n# Cara 3 — Fungsi helper\ndef minta_angka(prompt):\n    while True:\n        try:\n            return int(input(prompt))\n        except ValueError:\n            print('Input harus berupa angka!')\n\nangka = minta_angka('Masukkan angka: ')\nprint('Angka dikali 2:', angka * 2)\n\n💡 Selalu validasi input dari pengguna — tidak pernah percaya begitu saja!"
+    },
+    {
+      "id": "qual_009",
+      "kategori": "code_quality",
+      "sub_kategori": "readable_conditions",
+      "instruction": "Buat kondisi yang kompleks ini lebih mudah dibaca",
+      "input": "def cek_kelayakan(usia, nilai, hadir):\n    if usia >= 12 and usia <= 18 and nilai >= 75 and hadir >= 80:\n        return True\n    return False",
+      "output": "✅ Fungsi ini benar tapi kondisinya sulit dibaca.\n\nVersi yang lebih mudah dibaca:\ndef cek_kelayakan(usia, nilai, kehadiran):\n    \"\"\"\n    Cek apakah siswa layak mengikuti ujian.\n    Syarat: usia 12-18 tahun, nilai >= 75, kehadiran >= 80%\n    \"\"\"\n    usia_valid = 12 <= usia <= 18    # Python mendukung range comparison!\n    nilai_cukup = nilai >= 75\n    hadir_cukup = kehadiran >= 80\n    \n    return usia_valid and nilai_cukup and hadir_cukup\n\n# Penggunaan:\nprint(cek_kelayakan(15, 80, 85))  # True\nprint(cek_kelayakan(15, 60, 85))  # False (nilai kurang)\nprint(cek_kelayakan(20, 80, 85))  # False (usia tidak valid)\n\n💡 Tips keterbacaan kode:\n- Simpan kondisi kompleks ke variabel bernama\n- Gunakan nama variabel yang menjelaskan artinya\n- Python mendukung '12 <= usia <= 18' (lebih alami dari matematika!)"
+    },
+    {
+      "id": "qual_010",
+      "kategori": "code_quality",
+      "sub_kategori": "dictionary_usage",
+      "instruction": "Ganti if-elif panjang ini dengan dictionary lookup yang lebih efisien",
+      "input": "def nama_hari(nomor):\n    if nomor == 1:\n        return 'Senin'\n    elif nomor == 2:\n        return 'Selasa'\n    elif nomor == 3:\n        return 'Rabu'\n    elif nomor == 4:\n        return 'Kamis'\n    elif nomor == 5:\n        return 'Jumat'\n    elif nomor == 6:\n        return 'Sabtu'\n    elif nomor == 7:\n        return 'Minggu'\n    else:\n        return 'Tidak valid'",
+      "output": "✅ Kode benar tapi 15 baris bisa dipersingkat menjadi 5 baris!\n\nVersi dengan dictionary (jauh lebih ringkas):\ndef nama_hari(nomor):\n    hari = {\n        1: 'Senin',\n        2: 'Selasa',\n        3: 'Rabu',\n        4: 'Kamis',\n        5: 'Jumat',\n        6: 'Sabtu',\n        7: 'Minggu',\n    }\n    return hari.get(nomor, 'Tidak valid')\n\nprint(nama_hari(3))   # Output: Rabu\nprint(nama_hari(7))   # Output: Minggu\nprint(nama_hari(9))   # Output: Tidak valid\n\nContoh serupa — nilai ke huruf:\ndef nilai_ke_huruf(nilai):\n    for batas, huruf in [(90,'A'), (80,'B'), (70,'C'), (60,'D')]:\n        if nilai >= batas:\n            return huruf\n    return 'E'\n\n💡 Dictionary lookup lebih cepat, lebih pendek, dan lebih mudah diubah jika ada penambahan data!"
+    },
+    {
+      "id": "ocr_001",
+      "kategori": "ocr_correction",
+      "sub_kategori": "character_confusion",
+      "instruction": "Kode ini hasil OCR dari tulisan tangan dengan beberapa karakter yang salah dibaca. Perbaiki!",
+      "input": "# Hasil OCR dari foto kode\nfor l in range(lO):\n    prlnt(l)",
+      "output": "🔍 Perbaikan OCR: beberapa karakter tertukar\n\nKesalahan OCR yang ditemukan:\n1. 'l' (huruf L kecil) salah baca sebagai 'l' → harusnya 'i' (variabel loop)\n2. 'lO' (huruf L + huruf O) salah baca → harusnya '10' (angka sepuluh)\n3. 'prlnt' → harusnya 'print' (huruf 'i' terbaca 'l')\n\nKode yang benar:\nfor i in range(10):\n    print(i)\n\nOutput: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9\n\n💡 Karakter yang sering tertukar dalam OCR tulisan tangan:\n- l (L kecil) ↔ 1 (angka satu) ↔ I (i kapital)\n- O (o kapital) ↔ 0 (angka nol)\n- rn ↔ m\n- cl ↔ d"
+    },
+    {
+      "id": "ocr_002",
+      "kategori": "ocr_correction",
+      "sub_kategori": "semicolon_colon",
+      "instruction": "OCR salah membaca titik dua menjadi titik koma. Perbaiki kode ini",
+      "input": "def cek_lulus(nilai);\n    if nilai >= 75;\n        return True\n    return False",
+      "output": "🔍 Perbaikan OCR: ':' (titik dua) terbaca sebagai ';' (titik koma)\n\nDalam Python, tanda ':' digunakan setelah def, if, else, for, while — bukan ';'. Tanda ';' adalah pemisah pernyataan di satu baris (jarang dipakai).\n\nKode yang benar:\ndef cek_lulus(nilai):\n    if nilai >= 75:\n        return True\n    return False\n\nprint(cek_lulus(80))  # True\nprint(cek_lulus(60))  # False\n\n💡 Pola yang perlu diperhatikan: jika ada ';' setelah def/if/else/for/while, kemungkinan besar itu adalah ':' yang salah dibaca OCR."
+    },
+    {
+      "id": "ocr_003",
+      "kategori": "ocr_correction",
+      "sub_kategori": "indentation_spaces",
+      "instruction": "OCR kehilangan indentasi pada kode ini. Rekonstruksi dengan indentasi yang benar",
+      "input": "def hitung_faktorial(n):\nif n == 0:\nreturn 1\nreturn n * hitung_faktorial(n - 1)",
+      "output": "🔍 Perbaikan OCR: indentasi hilang karena spasi di awal baris tidak terdeteksi\n\nKode yang benar (dengan indentasi 4 spasi):\ndef hitung_faktorial(n):\n    if n == 0:\n        return 1\n    return n * hitung_faktorial(n - 1)\n\nLogika fungsi:\n- Base case: jika n=0, kembalikan 1 (faktorial(0) = 1)\n- Recursive case: n × faktorial(n-1)\n\nContoh:\nprint(hitung_faktorial(5))  # 5×4×3×2×1 = 120\nprint(hitung_faktorial(0))  # 1\n\n💡 Tips menulis kode tangan agar OCR lebih akurat:\n- Tulis dengan garis panduan/kotak\n- Beri spasi yang konsisten di awal setiap level\n- Hindari tulisan terlalu miring"
+    },
+    {
+      "id": "ocr_004",
+      "kategori": "ocr_correction",
+      "sub_kategori": "quote_confusion",
+      "instruction": "OCR salah membaca tanda kutip pada kode ini. Perbaiki!",
+      "input": "nama = ‘Budi Santoso’\nprint(“Halo,” nama)",
+      "output": "🔍 Perbaikan OCR: tanda kutip 'smart quote' (tipografi) terdeteksi, bukan kutip Python standar\n\nKarakter yang salah:\n- ‘ dan ’ (smart quote tunggal) → seharusnya ' (kutip tunggal standar)\n- “ dan ” (smart quote ganda) → seharusnya \" (kutip ganda standar)\n\nKode yang benar:\nnama = 'Budi Santoso'\nprint('Halo,', nama)\n\nAtau:\nnama = \"Budi Santoso\"\nprint(\"Halo,\", nama)\n\nOutput: Halo, Budi Santoso\n\n💡 Python hanya mengenali kutip standar: ' dan \" — bukan kutip tipografi yang sering muncul di Word atau aplikasi lain."
+    },
+    {
+      "id": "ocr_005",
+      "kategori": "ocr_correction",
+      "sub_kategori": "number_letter",
+      "instruction": "Perbaiki kode yang salah akibat kebingungan angka dan huruf dalam OCR",
+      "input": "nilai = [8O, 75, 92, 6O, 88]\ntotal = O\nfor n in nilai:\n    total = total + n\nrata = total / 5\nprint('Rata-rata:', rata)",
+      "output": "🔍 Perbaikan OCR: angka 0 (nol) terbaca sebagai huruf O (o kapital)\n\nKesalahan yang ditemukan:\n- '8O' → seharusnya '80' (delapan puluh)\n- '6O' → seharusnya '60' (enam puluh)\n- 'O' (variabel total awal) → seharusnya '0' (angka nol)\n\nKode yang benar:\nnilai = [80, 75, 92, 60, 88]\ntotal = 0\nfor n in nilai:\n    total = total + n\nrata = total / 5\nprint('Rata-rata:', rata)\n\nOutput: Rata-rata: 79.0\n\nAtau versi lebih ringkas:\nnilai = [80, 75, 92, 60, 88]\nprint('Rata-rata:', sum(nilai) / len(nilai))\n\n💡 Tips: Saat lihat 'O' atau 'l' dalam konteks angka, kemungkinan besar itu '0' atau '1' yang salah baca OCR."
+    }
+  ]
+}

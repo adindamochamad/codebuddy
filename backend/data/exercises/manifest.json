@@ -1,0 +1,62 @@
+{
+  "versi": 2,
+  "deskripsi": "Daftar latihan statis CodeBuddy — dimuat via GET /api/exercises/",
+  "latihan": [
+    {
+      "exercise_id": "hello_print",
+      "judul": "Halo Dunia!",
+      "ringkas": "Cetak kalimat 'Halo, Dunia!' menggunakan fungsi print.",
+      "starter_code": "# Tulis kode di sini\nprint()\n",
+      "difficulty": "beginner"
+    },
+    {
+      "exercise_id": "variabel_nama",
+      "judul": "Simpan Nama dalam Variabel",
+      "ringkas": "Buat variabel 'nama' berisi namamu, lalu cetak salam menggunakan variabel tersebut.",
+      "starter_code": "# Isi variabel nama dengan namamu\nnama = \"\"\n\n# Cetak salam\nprint(\"Halo,\", nama)\n",
+      "difficulty": "beginner"
+    },
+    {
+      "exercise_id": "loop_bintang",
+      "judul": "Cetak Bintang Berulang",
+      "ringkas": "Gunakan loop for dan range() untuk mencetak bintang (*) sebanyak 5 baris.",
+      "starter_code": "# Gunakan for dan range()\nfor i in range(5):\n    # cetak bintang di sini\n    pass\n",
+      "difficulty": "beginner"
+    },
+    {
+      "exercise_id": "jumlah_genap",
+      "judul": "Jumlah Bilangan Genap",
+      "ringkas": "Hitung jumlah semua bilangan genap dari 1 sampai 20 menggunakan loop dan kondisi if.",
+      "starter_code": "total = 0\nfor i in range(1, 21):\n    # cek apakah i genap\n    pass\n\nprint(\"Jumlah:\", total)\n",
+      "difficulty": "beginner"
+    },
+    {
+      "exercise_id": "fungsi_luas_persegi",
+      "judul": "Fungsi Luas Persegi Panjang",
+      "ringkas": "Buat fungsi hitung_luas(panjang, lebar) yang mengembalikan luas persegi panjang.",
+      "starter_code": "def hitung_luas(panjang, lebar):\n    # kembalikan hasil perkalian\n    pass\n\n# Uji fungsi\nprint(hitung_luas(5, 3))   # harus mencetak 15\nprint(hitung_luas(10, 4))  # harus mencetak 40\n",
+      "difficulty": "beginner"
+    },
+    {
+      "exercise_id": "loop_sum",
+      "judul": "Jumlah 1 sampai N",
+      "ringkas": "Hitung jumlah bilangan 1 sampai n dengan loop. Gunakan fungsi dengan parameter.",
+      "starter_code": "def jumlah(n):\n    total = 0\n    # tulis loop di sini\n    return total\n\nprint(jumlah(10))  # harus mencetak 55\n",
+      "difficulty": "beginner"
+    },
+    {
+      "exercise_id": "list_filter",
+      "judul": "Filter List dengan Kondisi",
+      "ringkas": "Dari list angka yang diberikan, buat list baru yang hanya berisi angka lebih besar dari 10.",
+      "starter_code": "angka = [3, 15, 7, 22, 1, 18, 9, 30]\nhasil = []\n\nfor n in angka:\n    # tambahkan ke hasil jika n > 10\n    pass\n\nprint(hasil)\n",
+      "difficulty": "intermediate"
+    },
+    {
+      "exercise_id": "rekursi_faktorial",
+      "judul": "Faktorial Rekursif",
+      "ringkas": "Implementasikan fungsi faktorial(n) secara rekursif. faktorial(5) harus menghasilkan 120.",
+      "starter_code": "def faktorial(n):\n    # base case\n    if n == 0:\n        return 1\n    # recursive case\n    pass\n\nprint(faktorial(5))   # 120\nprint(faktorial(0))   # 1\nprint(faktorial(3))   # 6\n",
+      "difficulty": "advanced"
+    }
+  ]
+}

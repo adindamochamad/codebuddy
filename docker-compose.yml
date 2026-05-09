@@ -1,0 +1,27 @@
+# Ollama untuk LLM lokal (Gemma / model lain). Backend bisa dijalankan di host atau kontainer terpisah.
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  # Aktifkan jika ingin API di Docker bersama jaringan yang sama:
+  # backend:
+  #   build: .
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     OLLAMA_BASE_URL: http://ollama:11434
+  #     DATABASE_URL: sqlite+aiosqlite:///./data/codebuddy.db
+  #   volumes:
+  #     - backend_data:/app/data
+  #   depends_on:
+  #     - ollama
+
+volumes:
+  ollama_data: {}
+  # backend_data: {}
