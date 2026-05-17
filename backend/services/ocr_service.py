@@ -364,9 +364,12 @@ async def ekstrak_teks_dari_gambar(
     if not isi_gambar:
         raise LayananOCRError("Berkas gambar kosong.")
 
+    # Simpan alasan vision gagal — dipakai jika fallback Paddle juga tidak jalan
+    alasan_vision: Optional[str] = None
+
     # ── Primary: Gemma 4 Vision ───────────────────────────────────────── #
     try:
-        from services.llm_service import gemma_vision_service, LayananLLMError  # noqa: PLC0415
+        from services.llm_service import gemma_vision_service  # noqa: PLC0415
         hasil_vision = await gemma_vision_service.ekstrak_kode(isi_gambar)
         logger.info("Gemma 4 Vision berhasil: confidence=%.2f", hasil_vision["confidence"])
         return {
@@ -376,6 +379,7 @@ async def ekstrak_teks_dari_gambar(
             "confidence": hasil_vision["confidence"],
         }
     except Exception as exc:  # noqa: BLE001
+        alasan_vision = str(exc)[:400]
         logger.warning("Gemma 4 Vision gagal (%s) — fallback ke PaddleOCR", exc)
 
     # ── Fallback: PaddleOCR ──────────────────────────────────────────── #
@@ -386,7 +390,18 @@ async def ekstrak_teks_dari_gambar(
 
     try:
         svc = CodeOCRService(lang=bahasa)
-        hasil = await asyncio.to_thread(svc.extract_code, tmp_path)
+        try:
+            hasil = await asyncio.to_thread(svc.extract_code, tmp_path)
+        except LayananOCRError as exc_paddle:
+            # Gabungkan konteks agar 503 tidak hanya menyalahkan Paddle
+            vis = alasan_vision or "alasan tidak tercatat"
+            raise LayananOCRError(
+                f"Gemma Vision gagal ({vis}). "
+                f"Paddle fallback tidak tersedia: {exc_paddle} "
+                "— pastikan Ollama jalan + model vision (mis. gemma4:e4b), "
+                "atau pasang Paddle: pip install -r requirements-ocr.txt "
+                "(biasanya Python 3.10–3.12; lihat komentar di file tersebut)."
+            ) from exc_paddle
     finally:
         try:
             os.unlink(tmp_path)

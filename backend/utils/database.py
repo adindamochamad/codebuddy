@@ -80,20 +80,128 @@ async def _seed_jika_kosong() -> None:
 
 
 async def _seed_siswa_contoh() -> None:
-    """Tambahkan 3 siswa contoh untuk demo hackathon."""
-    from models.crud import create_student  # noqa: PLC0415
+    """Tambahkan siswa contoh + submissions + progress untuk demo hackathon."""
+    from datetime import timedelta  # noqa: PLC0415
+    from models.database import CodeSubmission, Progress, Student  # noqa: PLC0415
 
-    contoh = [
-        {"name": "Budi Santoso",   "age": 13, "level": "beginner"},
-        {"name": "Siti Rahayu",    "age": 15, "level": "intermediate"},
-        {"name": "Ahmad Fauzi",    "age": 12, "level": "beginner"},
+    daftar_siswa = [
+        {"name": "Andi Pratama",    "age": 10, "level": "beginner"},
+        {"name": "Siti Nurhaliza",  "age": 11, "level": "intermediate"},
+        {"name": "Pak Wayan Darma", "age": 35, "level": "advanced"},
+        {"name": "Budi Santoso",    "age": 9,  "level": "beginner"},
+        {"name": "Dewi Lestari",    "age": 12, "level": "beginner"},
     ]
 
     async with pembuat_sesi_async() as sesi:
-        for data in contoh:
-            try:
-                siswa = await create_student(sesi, **data)
-                logger.info("Seed: siswa '%s' (id=%d) dibuat.", siswa.name, siswa.id)
-            except Exception as exc:  # noqa: BLE001
-                logger.warning("Seed siswa '%s' gagal (mungkin sudah ada): %s", data["name"], exc)
-                await sesi.rollback()
+        # Buat siswa
+        siswa_ids = []
+        for data in daftar_siswa:
+            siswa = Student(**data)
+            sesi.add(siswa)
+        await sesi.commit()
+
+        from sqlalchemy import select  # noqa: PLC0415
+        semua_siswa = (await sesi.scalars(select(Student))).all()
+        siswa_ids = [s.id for s in semua_siswa]
+        logger.info("Seed: %d siswa dibuat.", len(siswa_ids))
+
+        # Submissions contoh — simulasi riwayat belajar
+        from datetime import datetime, timezone  # noqa: PLC0415
+        sekarang = datetime.now(timezone.utc)
+
+        contoh_submissions = [
+            # Andi (beginner) — beberapa error, belajar bertahap
+            {"student_id": siswa_ids[0], "code": 'print("Halo Dunia!")', "errors": None, "score": 100.0,
+             "timestamp": sekarang - timedelta(days=5)},
+            {"student_id": siswa_ids[0], "code": 'nama = "Andi"\nprint("Halo " + nama + umur)', "score": 30.0,
+             "errors": [{"type": "TypeError", "message": "can only concatenate str", "line": 2}],
+             "timestamp": sekarang - timedelta(days=4)},
+            {"student_id": siswa_ids[0], "code": 'nama = "Andi"\numur = 10\nprint("Halo " + nama)', "score": 80.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=3)},
+            {"student_id": siswa_ids[0], "code": 'for i in range(5)\n    print("*")', "score": 20.0,
+             "errors": [{"type": "SyntaxError", "message": "expected ':'", "line": 1}],
+             "timestamp": sekarang - timedelta(days=2)},
+            {"student_id": siswa_ids[0], "code": 'for i in range(5):\n    print("*")', "score": 100.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=1)},
+            # Siti (intermediate) — lebih konsisten
+            {"student_id": siswa_ids[1], "code": 'def luas(p, l):\n    return p * l\nprint(luas(5,3))', "score": 100.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=6)},
+            {"student_id": siswa_ids[1], "code": 'angka = [3,15,7,22]\nhasil = [n for n in angka if n > 10]\nprint(hasil)', "score": 100.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=4)},
+            {"student_id": siswa_ids[1], "code": 'def jumlah(n):\n    return sum(range(1, n+1))\nprint(jumlah(10))', "score": 100.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=2)},
+            # Pak Wayan (advanced, guru yang tes)
+            {"student_id": siswa_ids[2], "code": 'def faktorial(n):\n    if n == 0: return 1\n    return n * faktorial(n-1)\nprint(faktorial(5))', "score": 100.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=3)},
+            # Budi (beginner) — stuck di loop
+            {"student_id": siswa_ids[3], "code": 'for i in range(5)\n    print(i)', "score": 20.0,
+             "errors": [{"type": "SyntaxError", "message": "expected ':'", "line": 1}],
+             "timestamp": sekarang - timedelta(days=5)},
+            {"student_id": siswa_ids[3], "code": 'for i in range(5)\n    print(i)', "score": 20.0,
+             "errors": [{"type": "SyntaxError", "message": "expected ':'", "line": 1}],
+             "timestamp": sekarang - timedelta(days=4)},
+            {"student_id": siswa_ids[3], "code": 'for i in range(5)\n    print(i)', "score": 20.0,
+             "errors": [{"type": "SyntaxError", "message": "expected ':'", "line": 1}],
+             "timestamp": sekarang - timedelta(days=3)},
+            {"student_id": siswa_ids[3], "code": 'for i in range(5)\n    print(i)', "score": 20.0,
+             "errors": [{"type": "SyntaxError", "message": "expected ':'", "line": 1}],
+             "timestamp": sekarang - timedelta(days=2)},
+            {"student_id": siswa_ids[3], "code": 'for i in range(5)\n    print(i)', "score": 20.0,
+             "errors": [{"type": "SyntaxError", "message": "expected ':'", "line": 1}],
+             "timestamp": sekarang - timedelta(days=1)},
+            # Dewi (beginner) — campuran sukses dan error
+            {"student_id": siswa_ids[4], "code": 'print("Halo!")', "score": 100.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=4)},
+            {"student_id": siswa_ids[4], "code": 'x = 5\nprint(x / 0)', "score": 40.0,
+             "errors": [{"type": "ZeroDivisionError", "message": "division by zero", "line": 2}],
+             "timestamp": sekarang - timedelta(days=3)},
+            {"student_id": siswa_ids[4], "code": 'nama = input("Siapa namamu? ")\nprint(nama)', "score": 70.0,
+             "errors": None, "timestamp": sekarang - timedelta(days=1)},
+        ]
+
+        for sub_data in contoh_submissions:
+            sub = CodeSubmission(
+                student_id=sub_data["student_id"],
+                code=sub_data["code"],
+                errors=sub_data.get("errors"),
+                score=sub_data["score"],
+                timestamp=sub_data["timestamp"],
+            )
+            sesi.add(sub)
+        await sesi.commit()
+        logger.info("Seed: %d submissions contoh dibuat.", len(contoh_submissions))
+
+        # Progress per exercise
+        contoh_progress = [
+            # Andi — hello_print selesai, loop_bintang selesai, variabel_nama sedang
+            {"student_id": siswa_ids[0], "exercise_id": "hello_print", "completed": True, "attempts": 1, "avg_score": 100.0},
+            {"student_id": siswa_ids[0], "exercise_id": "variabel_nama", "completed": True, "attempts": 3, "avg_score": 70.0},
+            {"student_id": siswa_ids[0], "exercise_id": "loop_bintang", "completed": True, "attempts": 2, "avg_score": 60.0},
+            # Siti — banyak yang selesai
+            {"student_id": siswa_ids[1], "exercise_id": "hello_print", "completed": True, "attempts": 1, "avg_score": 100.0},
+            {"student_id": siswa_ids[1], "exercise_id": "variabel_nama", "completed": True, "attempts": 1, "avg_score": 95.0},
+            {"student_id": siswa_ids[1], "exercise_id": "loop_bintang", "completed": True, "attempts": 1, "avg_score": 100.0},
+            {"student_id": siswa_ids[1], "exercise_id": "fungsi_luas_persegi", "completed": True, "attempts": 2, "avg_score": 85.0},
+            {"student_id": siswa_ids[1], "exercise_id": "list_filter", "completed": True, "attempts": 1, "avg_score": 100.0},
+            # Pak Wayan — semua selesai
+            {"student_id": siswa_ids[2], "exercise_id": "rekursi_faktorial", "completed": True, "attempts": 1, "avg_score": 100.0},
+            # Budi — stuck di loop_bintang (banyak attempt, belum selesai)
+            {"student_id": siswa_ids[3], "exercise_id": "hello_print", "completed": True, "attempts": 2, "avg_score": 60.0},
+            {"student_id": siswa_ids[3], "exercise_id": "loop_bintang", "completed": False, "attempts": 7, "avg_score": 25.0},
+            # Dewi — baru mulai
+            {"student_id": siswa_ids[4], "exercise_id": "hello_print", "completed": True, "attempts": 1, "avg_score": 100.0},
+            {"student_id": siswa_ids[4], "exercise_id": "variabel_nama", "completed": False, "attempts": 3, "avg_score": 55.0},
+        ]
+
+        for prog_data in contoh_progress:
+            prog = Progress(
+                student_id=prog_data["student_id"],
+                exercise_id=prog_data["exercise_id"],
+                completed=prog_data["completed"],
+                attempts=prog_data["attempts"],
+                avg_score=prog_data["avg_score"],
+                last_attempt=sekarang - timedelta(days=1),
+            )
+            sesi.add(prog)
+        await sesi.commit()
+        logger.info("Seed: %d progress records dibuat.", len(contoh_progress))

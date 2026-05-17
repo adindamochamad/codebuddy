@@ -67,3 +67,18 @@ yarn-error.log*
 
 # Docker overrides (optional local)
 docker-compose.override.yml
+
+# Aset uji OCR lokal (foto sample pribadi; tidak wajib di repo)
+Test Pic OCR/
+
+# Dokumentasi internal dan video (tidak perlu di public repo)
+docs/
+Video/
+demo_assets/
+*.mp4
+*.mp3
+*.wav
+
+# Cursor rules (personal config)
+.cursorrules
+.claude/

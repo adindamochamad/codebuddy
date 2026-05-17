@@ -258,8 +258,8 @@ Kembalikan HANYA JSON valid:
 {{
   "title": "Judul soal yang menarik dalam {bahasa_cfg['nama']}",
   "instructions": "Instruksi lengkap dalam {bahasa_cfg['nama']}, ramah anak SD. Pakai konteks Indonesia (warung, sekolah, sepak bola, layangan, dll).",
-  "starter_code": "# Komentar dalam {bahasa_cfg['nama']}\\n# Kode Python kosong untuk siswa lengkapi",
-  "solution": "# Solusi Python lengkap (komentar dalam {bahasa_cfg['nama']})",
+  "starter_code": "Kode BELUM LENGKAP — siswa harus mengisi bagian yang kosong. WAJIB gunakan salah satu atau kombinasi: (1) '# TODO: <petunjuk>' untuk baris yang harus diisi, (2) 'pass' sebagai placeholder fungsi kosong, (3) '___' untuk nilai/ekspresi yang harus diisi. JANGAN tulis solusi lengkap di sini. Contoh format:\\n# TODO: isi nama variabelmu\\nnama = ___\\n# TODO: cetak sapaan\\nprint(___)",
+  "solution": "# Solusi Python lengkap yang benar (komentar dalam {bahasa_cfg['nama']})",
   "test_cases": [
     {{
       "input": "nilai input atau null",
@@ -269,10 +269,13 @@ Kembalikan HANYA JSON valid:
   ]
 }}
 
-Pastikan:
+Aturan WAJIB untuk starter_code:
+- HARUS ada minimal 2 baris dengan '# TODO:' atau '___' yang perlu diisi siswa.
+- JANGAN tulis kode yang langsung bisa dijalankan dan menghasilkan output benar.
+- JANGAN sertakan solusinya di starter_code.
+- Siswa harus mengisi sendiri agar program berjalan.
 - Soal pakai konteks Indonesia/lokal yang familiar untuk anak.
-- `starter_code` memberi petunjuk tanpa memberikan jawaban.
-- `test_cases` minimal 2 kasus uji.
+- test_cases minimal 2 kasus uji.
 - JANGAN tambahkan teks apapun di luar blok JSON.
 """
 

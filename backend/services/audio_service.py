@@ -207,12 +207,14 @@ class STTService:
 
         model = self._get_model()
 
-        def _transcribe() -> dict[str, Any]:
+        def _transcribe(dengan_vad: bool) -> dict[str, Any]:
+            # VAD sering membuang rekaman mikrofon yang lemah / noise ringan —
+            # kalau hasil kosong, kita coba lagi tanpa VAD di bawah.
             segments, info = model.transcribe(
                 audio_path,
                 language=whisper_lang,
                 beam_size=5,
-                vad_filter=True,  # Voice activity detection — skip silence
+                vad_filter=dengan_vad,
             )
             teks_segments = []
             confs = []
@@ -228,7 +230,13 @@ class STTService:
             }
 
         # Jalankan di thread agar tidak block event loop
-        hasil = await asyncio.to_thread(_transcribe)
+        hasil = await asyncio.to_thread(_transcribe, True)
+        if not hasil["teks"].strip():
+            logger.warning(
+                "STT kosong dengan VAD, coba ulang tanpa VAD: %s",
+                audio_path,
+            )
+            hasil = await asyncio.to_thread(_transcribe, False)
         logger.info(
             "STT selesai: bahasa=%s panjang=%ds teks=%d karakter",
             hasil["bahasa"], hasil.get("durasi", 0), len(hasil["teks"]),

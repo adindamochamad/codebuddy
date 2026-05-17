@@ -13,8 +13,11 @@ Endpoint yang tersedia:
   Exercises GET  /api/exercises/
             POST /api/exercises/generate
 
-# TODO (rate limiting): tambahkan slowapi atau middleware Redis bucket
-#   per-IP: OCR max 20 req/min, execute max 60 req/min, agent max 10 req/min
+Rate Limiting:
+  - OCR: 20 req/min per IP
+  - Code Execution: 60 req/min per IP
+  - Agent/LLM: 10 req/min per IP
+  - Default: 60 req/min per IP
 """
 
 from __future__ import annotations
@@ -26,7 +29,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Optional
 
-from fastapi import APIRouter, File, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -59,8 +62,9 @@ from models.database import Progress, Student
 from services.agent_service import code_buddy_agent
 from services.code_executor import safe_executor
 from services.llm_service import BAHASA_DAERAH, LayananLLMError, gemma_service
-from services.ocr_service import CodeOCRService, LayananOCRError
+from services.ocr_service import LayananOCRError, ekstrak_teks_dari_gambar
 from utils.config import pengaturan
+from utils.pembatas_kueri import pembatas_per_ip
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -85,7 +89,9 @@ _MANIFEST_PATH = Path(__file__).parent.parent / "data" / "exercises" / "manifest
         503: {"description": "OCR tidak tersedia (PaddleOCR belum terpasang)"},
     },
 )
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_ocr}/minute")
 async def ekstrak_kode_dari_gambar(
+    request: Request,
     berkas: UploadFile = File(..., description="Gambar JPG/PNG berisi kode (maks 5 MB)"),
 ) -> ResponsEkstrakOCR:
     """Unggah foto kode tulisan tangan dan dapatkan kode Python hasil OCR.
@@ -114,22 +120,13 @@ async def ekstrak_kode_dari_gambar(
         )
     if len(isi) > _MAX_UPLOAD_BYTES:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
             detail=f"Ukuran file melebihi batas {_MAX_UPLOAD_BYTES // (1024*1024)} MB.",
         )
 
-    # Simpan ke tempfile dan jalankan OCR
-    sufiks = ".png" if "png" in ct else ".jpg"
-    tmp_path: Optional[str] = None
+    # Pakai Gemma 4 Vision sebagai primary, fallback PaddleOCR
     try:
-        with tempfile.NamedTemporaryFile(suffix=sufiks, delete=False) as tmp:
-            tmp.write(isi)
-            tmp_path = tmp.name
-
-        svc = CodeOCRService()
-        import asyncio
-        hasil = await asyncio.to_thread(svc.extract_code, tmp_path)
-
+        hasil = await ekstrak_teks_dari_gambar(isi)
     except LayananOCRError as exc:
         logger.error("OCR gagal: %s", exc)
         raise HTTPException(
@@ -142,19 +139,16 @@ async def ekstrak_kode_dari_gambar(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Gagal memproses gambar: {exc}",
         ) from exc
-    finally:
-        if tmp_path and os.path.exists(tmp_path):
-            try:
-                os.unlink(tmp_path)
-            except OSError:
-                pass
 
-    logger.info("OCR berhasil: confidence=%.3f panjang_kode=%d", hasil["confidence"], len(hasil["code"]))
+    logger.info(
+        "OCR berhasil via %s: confidence=%.3f panjang_kode=%d",
+        hasil.get("engine", "?"), hasil["confidence"], len(hasil["text"]),
+    )
     return ResponsEkstrakOCR(
         success=True,
-        code=hasil["code"],
+        code=hasil["text"],
         confidence=hasil["confidence"],
-        lines=hasil["raw_lines"],
+        lines=hasil.get("lines", []),
     )
 
 
@@ -168,7 +162,8 @@ async def ekstrak_kode_dari_gambar(
     tags=["code"],
     summary="Jalankan kode Python dalam sandbox RestrictedPython",
 )
-async def eksekusi_kode(payload: PermintaanEksekusiKode) -> ResponsEksekusiKode:
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_per_minute}/minute")
+async def eksekusi_kode(request: Request, payload: PermintaanEksekusiKode) -> ResponsEksekusiKode:
     """Jalankan kode Python dengan aman di sandbox RestrictedPython.
 
     - Timeout: 5 detik
@@ -191,7 +186,8 @@ async def eksekusi_kode(payload: PermintaanEksekusiKode) -> ResponsEksekusiKode:
     tags=["code"],
     summary="Cek syntax kode Python tanpa mengeksekusinya",
 )
-async def validasi_syntax(payload: PermintaanValidasiKode) -> ResponsValidasiKode:
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_per_minute}/minute")
+async def validasi_syntax(request: Request, payload: PermintaanValidasiKode) -> ResponsValidasiKode:
     """Validasi syntax kode Python — cepat, tanpa eksekusi.
 
     Berguna untuk feedback real-time saat siswa mengetik.
@@ -215,7 +211,8 @@ async def validasi_syntax(payload: PermintaanValidasiKode) -> ResponsValidasiKod
     tags=["agent"],
     summary="Sesi tutoring lengkap dengan analisis agentic multi-tahap",
 )
-async def sesi_tutor_agentic(payload: PermintaanTutorAgen) -> ResponsTutorAgen:
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_agent}/minute")
+async def sesi_tutor_agentic(request: Request, payload: PermintaanTutorAgen) -> ResponsTutorAgen:
     """Orkestrasi tutoring otomatis: syntax → eksekusi → analisis LLM.
 
     Tahapan yang dijalankan secara otomatis:
@@ -258,7 +255,8 @@ async def sesi_tutor_agentic(payload: PermintaanTutorAgen) -> ResponsTutorAgen:
     tags=["agent"],
     summary="Dapatkan hint bertahap tanpa langsung memberi jawaban",
 )
-async def petunjuk_bertahap(payload: PermintaanHint) -> ResponsHint:
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_agent}/minute")
+async def petunjuk_bertahap(request: Request, payload: PermintaanHint) -> ResponsHint:
     """Hint progresif untuk membantu siswa berpikir mandiri.
 
     - **Level 1**: Pertanyaan pengarah saja
@@ -432,7 +430,8 @@ async def daftar_latihan(
         502: {"description": "LLM (Ollama) tidak tersedia"},
     },
 )
-async def generate_latihan(payload: PermintaanGenerateLatihan) -> ResponsLatihanDihasilkan:
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_agent}/minute")
+async def generate_latihan(request: Request, payload: PermintaanGenerateLatihan) -> ResponsLatihanDihasilkan:
     """Buat soal latihan Python baru secara dinamis menggunakan Gemma via Ollama.
 
     Contoh topic: `'variabel'`, `'loop'`, `'fungsi'`, `'list'`, `'rekursi'`
@@ -507,7 +506,8 @@ from fastapi.responses import FileResponse  # noqa: E402
     summary="Generate suara dari teks (TTS) — untuk anak SD yang belum lancar baca",
     response_class=FileResponse,
 )
-async def text_to_speech(payload: PermintaanTTS):
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_per_minute}/minute")
+async def text_to_speech(request: Request, payload: PermintaanTTS):
     """Konversi teks → file MP3 menggunakan edge-tts.
 
     Bahasa Indonesia natural dengan suara perempuan (Gadis) atau laki-laki (Ardi).
@@ -539,7 +539,9 @@ async def text_to_speech(payload: PermintaanTTS):
     tags=["audio"],
     summary="Transcribe audio → teks (STT) menggunakan Whisper offline",
 )
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_per_minute}/minute")
 async def speech_to_text(
+    request: Request,
     berkas: UploadFile = File(..., description="File audio (WAV/MP3/M4A) — maks 25 MB"),
     bahasa: str = "id",
 ):
@@ -561,7 +563,7 @@ async def speech_to_text(
     isi = await berkas.read()
     if len(isi) > 25 * 1024 * 1024:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
             detail="Audio melebihi 25 MB.",
         )
 
@@ -594,7 +596,9 @@ async def speech_to_text(
     tags=["audio"],
     summary="End-to-end: rekam suara → AI jawab dengan suara",
 )
+@pembatas_per_ip.limit(f"{pengaturan.rate_limit_agent}/minute")
 async def tanya_pakai_suara(
+    request: Request,
     berkas: UploadFile = File(..., description="Rekaman pertanyaan dalam Bahasa Indonesia"),
     bahasa: str = "id",
     student_level: str = "beginner",
@@ -612,6 +616,11 @@ async def tanya_pakai_suara(
     from services.audio_service import stt_service, bicara_dari_pertanyaan, LayananAudioError  # noqa: PLC0415
 
     isi = await berkas.read()
+    if not isi:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="File audio kosong. Rekam pertanyaan lagi, lalu kirim ulang.",
+        )
     sufiks = "." + (berkas.filename.split(".")[-1] if berkas.filename and "." in berkas.filename else "wav")
 
     tmp_path: Optional[str] = None
@@ -627,18 +636,32 @@ async def tanya_pakai_suara(
         if not pertanyaan.strip():
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Tidak ada suara yang terdeteksi.",
+                detail=(
+                    "Tidak ada suara yang terdeteksi. Coba merekam lebih dekat ke mikrofon, "
+                    "bicara sedikit lebih keras, atau perpanjang rekaman beberapa detik."
+                ),
             )
 
         # 2-4. AI + TTS
         hasil = await bicara_dari_pertanyaan(pertanyaan, bahasa=bahasa, student_level=student_level)
+
+        # Header HTTP hanya boleh ASCII printable (0x20–0x7E).
+        # Teks Indonesia + emoji di luar rentang itu menyebabkan
+        # "Invalid HTTP header value" di uvicorn — filter ketat ke ASCII saja.
+        def sanitasi_header(teks: str, maks: int = 200) -> str:
+            hanya_ascii = "".join(
+                karakter for karakter in teks[:maks]
+                if 0x20 <= ord(karakter) <= 0x7E
+            )
+            return hanya_ascii
+
         return FileResponse(
             hasil["jawaban_audio"],
             media_type="audio/mpeg",
             filename="codebuddy_jawaban.mp3",
             headers={
-                "X-Pertanyaan": pertanyaan[:200],
-                "X-Jawaban": hasil["jawaban_teks"][:200],
+                "X-Pertanyaan": sanitasi_header(pertanyaan),
+                "X-Jawaban": sanitasi_header(hasil["jawaban_teks"]),
             },
         )
 

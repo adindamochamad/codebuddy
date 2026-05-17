@@ -26,5 +26,20 @@ class PengaturanAplikasi(BaseSettings):
     # Batas eksekusi sandbox (karakter)
     kode_maksimal_panjang: int = 8000
 
+    # CORS Origins — daftar domain yang diizinkan akses API
+    # Development: localhost + Gradio default port
+    # Produksi: tambahkan domain deployment kamu
+    allowed_origins: list[str] = [
+        "http://localhost:7860",
+        "http://127.0.0.1:7860",
+        "http://localhost:3000",  # untuk frontend React/Next.js jika ada
+        "http://127.0.0.1:3000",
+    ]
+
+    # Rate Limiting — requests per menit per IP
+    rate_limit_per_minute: int = 60
+    rate_limit_ocr: int = 20      # OCR lebih berat, batas lebih ketat
+    rate_limit_agent: int = 10    # Agent/LLM paling mahal
+
 
 pengaturan = PengaturanAplikasi()

@@ -1,0 +1,10 @@
+# Preprocessing gambar untuk jalur fallback PaddleOCR (opencv dipakai di preprocess).
+# Cocok untuk Python 3.14+ di mana paddlepaddle belum ada wheel resmi.
+#
+# Pasang: pip install -r requirements-ocr-opencv.txt
+#
+# Catatan: OCR utama CodeBuddy adalah Gemma 4 Vision (Ollama). Jalur Paddle
+# butuh paddlepaddle + paddleocr — lihat requirements-ocr.txt (biasanya Python 3.10–3.12).
+
+opencv-python-headless>=4.8.0
+numpy>=1.24.0

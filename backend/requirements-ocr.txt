@@ -1,4 +1,15 @@
-# OCR — paket besar; pasang setelah inti: pip install -r requirements-ocr.txt
+# OCR lengkap (PaddleOCR + preprocessing). Pasang setelah inti:
+#   pip install -r requirements-ocr.txt
+#
+# PENTING — Python 3.14 (dan versi sangat baru lainnya):
+#   paddlepaddle belum merilis wheel di PyPI untuk interpreter tersebut, sehingga
+#   pip memunculkan: "No matching distribution found for paddlepaddle".
+#   Solusi:
+#   - Hanya perlu jalur Gemma Vision + preprocessing ringan:
+#       pip install -r requirements-ocr-opencv.txt
+#   - Butuh PaddleOCR penuh: buat venv dengan Python 3.10 / 3.11 / 3.12, lalu
+#       pip install -r requirements-ocr.txt
+#
 -r requirements.txt
 
 paddlepaddle>=3.0.0

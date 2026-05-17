@@ -5,12 +5,15 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from api.routes import router as router_utama
 from api.schemas import ResponsKesehatan
 from api.teacher import router as router_guru
 from utils.config import pengaturan
 from utils.database import init_db
+from utils.pembatas_kueri import pembatas_per_ip
 
 
 @asynccontextmanager
@@ -30,9 +33,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Rate limiting state dan error handler
+app.state.limiter = pembatas_per_ip
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# CORS dengan daftar origin spesifik
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],      # TODO produksi: ganti dengan daftar origin spesifik
+    allow_origins=pengaturan.allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

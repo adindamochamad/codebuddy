@@ -25,7 +25,7 @@
 
 <br/>
 
-[🚀 Quickstart](#-quickstart) · [✨ Fitur](#-fitur) · [🏗️ Arsitektur](#️-arsitektur) · [🌍 Bahasa Daerah](#-bahasa-daerah) · [📡 API](#-api-endpoints) · [🧬 Fine-tuning](#-fine-tuning)
+[🚀 Quickstart](#-quickstart) · [📖 Cara menjalankan (RUN.md)](RUN.md) · [✨ Fitur](#-fitur) · [🏗️ Arsitektur](#️-arsitektur) · [🌍 Bahasa Daerah](#-bahasa-daerah) · [📡 API](#-api-endpoints) · [🧬 Fine-tuning](#-fine-tuning)
 
 </div>
 
@@ -139,6 +139,8 @@ Gemma 4 mendukung 140+ bahasa. CodeBuddy menggunakannya untuk menjangkau pelajar
 ---
 
 ## 🚀 Quickstart
+
+Panduan **langkah demi langkah**, variabel lingkungan, troubleshooting, CORS, rate limiting, dan ringkasan perintah ada di **[RUN.md](RUN.md)**. Catatan riset/desain UI ada di folder **[docs/](docs/)**.
 
 ### Prasyarat
 
@@ -288,8 +290,8 @@ Dataset mencakup:
 
 ```bash
 cd backend
-pytest tests/ -v                                    # 139 passed, 3 skipped
-pytest tests/ --cov=. --cov-report=term-missing    # dengan coverage
+python -m pytest tests/ -v                                    # 139 passed, 3 skipped
+python -m pytest tests/ --cov=. --cov-report=term-missing    # dengan coverage
 ```
 
 ---
