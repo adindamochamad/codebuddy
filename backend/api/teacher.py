@@ -20,6 +20,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.deps import SesiDatabase
 from models.database import CodeSubmission, Progress, Student
 from services.llm_service import LayananLLMError, gemma_service
+from services.space_demo import aktif as space_demo_aktif
+from services.space_demo import wawasan_guru
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/teacher", tags=["teacher"])
@@ -135,6 +137,9 @@ async def insight_kelas(sesi: SesiDatabase) -> dict[str, Any]:
     """
     # Kumpulkan data dasar
     data = await dashboard_kelas(sesi)
+
+    if space_demo_aktif():
+        return {"data_kelas": data, "ai_insight": wawasan_guru(data)}
 
     prompt = (
         "Kamu adalah konsultan kurikulum coding untuk guru SD di Indonesia. "

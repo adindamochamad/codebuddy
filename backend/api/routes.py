@@ -63,6 +63,17 @@ from services.agent_service import code_buddy_agent
 from services.code_executor import safe_executor
 from services.llm_service import BAHASA_DAERAH, LayananLLMError, gemma_service
 from services.ocr_service import LayananOCRError, ekstrak_teks_dari_gambar
+from services.space_demo import (
+    CATATAN_TTS,
+    JAWABAN_SUARA,
+    PERTANYAAN_SUARA,
+    aktif as space_demo_aktif,
+    hasil_stt,
+    header_ascii,
+    kode_ocr_demo,
+    latihan as latihan_demo,
+    path_mp3,
+)
 from utils.config import pengaturan
 from utils.pembatas_kueri import pembatas_per_ip
 
@@ -122,6 +133,15 @@ async def ekstrak_kode_dari_gambar(
         raise HTTPException(
             status_code=status.HTTP_413_CONTENT_TOO_LARGE,
             detail=f"Ukuran file melebihi batas {_MAX_UPLOAD_BYTES // (1024*1024)} MB.",
+        )
+
+    if space_demo_aktif():
+        kode = kode_ocr_demo()
+        return ResponsEkstrakOCR(
+            success=True,
+            code=kode,
+            confidence=0.92,
+            lines=[{"text": baris} for baris in kode.splitlines() if baris.strip()],
         )
 
     # Pakai Gemma 4 Vision sebagai primary, fallback PaddleOCR
@@ -436,6 +456,16 @@ async def generate_latihan(request: Request, payload: PermintaanGenerateLatihan)
 
     Contoh topic: `'variabel'`, `'loop'`, `'fungsi'`, `'list'`, `'rekursi'`
     """
+    if space_demo_aktif():
+        hasil = latihan_demo(payload.topic, payload.difficulty)
+        return ResponsLatihanDihasilkan(
+            title=hasil["title"],
+            instructions=hasil["instructions"],
+            starter_code=hasil["starter_code"],
+            solution=hasil["solution"],
+            test_cases=hasil["test_cases"],
+        )
+
     try:
         hasil = await gemma_service.generate_exercise(
             topic=payload.topic,
@@ -513,6 +543,14 @@ async def text_to_speech(request: Request, payload: PermintaanTTS):
     Bahasa Indonesia natural dengan suara perempuan (Gadis) atau laki-laki (Ardi).
     Untuk bahasa daerah, fallback ke voice Indonesia.
     """
+    if space_demo_aktif():
+        return FileResponse(
+            path_mp3(),
+            media_type="audio/mpeg",
+            filename="codebuddy_tts.mp3",
+            headers={"X-Demo-Catatan": header_ascii(CATATAN_TTS, maks=300)},
+        )
+
     from services.audio_service import tts_service, LayananAudioError  # noqa: PLC0415
 
     try:
@@ -552,6 +590,20 @@ async def speech_to_text(
     - Siswa tunanetra
     - Pertanyaan natural dalam Bahasa Indonesia/daerah
     """
+    if space_demo_aktif():
+        if berkas.content_type and not berkas.content_type.startswith("audio/"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Bukan file audio. Content-type: {berkas.content_type}",
+            )
+        isi = await berkas.read()
+        if not isi:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="File audio kosong.",
+            )
+        return hasil_stt(bahasa)
+
     from services.audio_service import stt_service, LayananAudioError  # noqa: PLC0415
 
     if not berkas.content_type or not berkas.content_type.startswith("audio/"):
@@ -613,14 +665,25 @@ async def tanya_pakai_suara(
     Untuk anak yang belum lancar baca-tulis — bisa tanya pakai suara, dapat
     jawaban suara dalam bahasa ibu mereka.
     """
-    from services.audio_service import stt_service, bicara_dari_pertanyaan, LayananAudioError  # noqa: PLC0415
-
     isi = await berkas.read()
     if not isi:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="File audio kosong. Rekam pertanyaan lagi, lalu kirim ulang.",
         )
+    if space_demo_aktif():
+        return FileResponse(
+            path_mp3(),
+            media_type="audio/mpeg",
+            filename="codebuddy_jawaban.mp3",
+            headers={
+                "X-Pertanyaan": header_ascii(PERTANYAAN_SUARA, maks=400),
+                "X-Jawaban": header_ascii(JAWABAN_SUARA, maks=400),
+            },
+        )
+
+    from services.audio_service import stt_service, bicara_dari_pertanyaan, LayananAudioError  # noqa: PLC0415
+
     sufiks = "." + (berkas.filename.split(".")[-1] if berkas.filename and "." in berkas.filename else "wav")
 
     tmp_path: Optional[str] = None

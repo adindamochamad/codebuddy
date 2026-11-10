@@ -1,5 +1,6 @@
 """Konfigurasi aplikasi dari environment."""
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,6 +11,7 @@ class PengaturanAplikasi(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",
+        populate_by_name=True,
     )
 
     nama_aplikasi: str = "CodeBuddy"
@@ -35,6 +37,10 @@ class PengaturanAplikasi(BaseSettings):
         "http://localhost:3000",  # untuk frontend React/Next.js jika ada
         "http://127.0.0.1:3000",
     ]
+
+    # Demo Hugging Face Space. Mati secara default; hanya hidup jika
+    # CODEBUDDY_SPACE_DEMO=1. Saat mati, jalur Ollama lokal tidak berubah.
+    space_demo: bool = Field(default=False, alias="CODEBUDDY_SPACE_DEMO")
 
     # Rate Limiting — requests per menit per IP
     rate_limit_per_minute: int = 60

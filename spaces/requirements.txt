@@ -1,0 +1,14 @@
+# Paket yang Space demo-mode benar-benar import.
+# Jangan daftar gradio, spaces, atau huggingface_hub — runtime Gradio Space yang menyediakan.
+# Jangan daftar ollama, torch, transformers, paddleocr, faster-whisper, atau edge-tts.
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+sqlalchemy[asyncio]>=2.0.36
+greenlet>=3.0.0
+aiosqlite>=0.20.0
+pydantic-settings>=2.6.0
+python-multipart>=0.0.17
+restrictedpython>=7.0
+httpx>=0.27.0
+slowapi>=0.1.9
+nest-asyncio

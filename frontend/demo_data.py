@@ -4,25 +4,37 @@ File ini berisi contoh-contoh data yang sudah diisi sebelumnya untuk setiap tab,
 sehingga judge atau user baru bisa langsung mencoba fitur tanpa harus setup manual.
 """
 
+from __future__ import annotations
+
 import shutil
 import tempfile
 from pathlib import Path
 
-# Path ke gambar demo
-_DEMO_IMAGE_SOURCE = Path(__file__).parent.parent / "Test Pic OCR" / "Pic1.jpeg"
+# Gambar demo yang di-track. Folder "Test Pic OCR/" di-gitignore, jadi tidak dipakai.
+_ASET_DIR = Path(__file__).parent / "assets"
+_KANDIDAT_GAMBAR_DEMO = (
+    _ASET_DIR / "demo_handwriting.jpg",
+    _ASET_DIR / "demo_handwriting.png",
+)
+
+def _sumber_gambar_demo() -> Path | None:
+    for path in _KANDIDAT_GAMBAR_DEMO:
+        if path.is_file():
+            return path
+    return None
 
 def get_demo_image_path():
     """Copy demo image ke temp directory untuk Gradio security."""
-    if not _DEMO_IMAGE_SOURCE.exists():
+    sumber = _sumber_gambar_demo()
+    if sumber is None:
         return None
-    
-    # Copy ke temp directory
+
     temp_dir = Path(tempfile.gettempdir()) / "codebuddy_demo"
     temp_dir.mkdir(exist_ok=True)
-    
-    temp_file = temp_dir / "demo_handwriting.jpg"
-    shutil.copy2(_DEMO_IMAGE_SOURCE, temp_file)
-    
+
+    temp_file = temp_dir / f"demo_handwriting{sumber.suffix.lower() or '.jpg'}"
+    shutil.copy2(sumber, temp_file)
+
     return str(temp_file)
 
 # ============================================================================ #

@@ -17,6 +17,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Tests](https://img.shields.io/badge/Tests-139_passed-22C55E.svg?style=flat-square)](backend/tests/)
 [![Hackathon](https://img.shields.io/badge/Google_Gemma_4_Good_Hackathon-2026-FF0000.svg?style=flat-square&logo=kaggle&logoColor=white)](https://www.kaggle.com/competitions/gemma-4-good-hackathon)
+[![Live demo](https://img.shields.io/badge/Live_demo-Hugging_Face_Space-FFD21E.svg?style=flat-square)](https://huggingface.co/spaces/adindamochamad/codebuddy)
 
 <br/>
 

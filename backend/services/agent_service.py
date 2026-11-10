@@ -27,6 +27,9 @@ from services.llm_service import (
     gemma_service,
     kirim_chat_tutor,
 )
+from services.space_demo import aktif as space_demo_aktif
+from services.space_demo import petunjuk as petunjuk_demo
+from services.space_demo import umpan_balik_tutor
 
 logger = logging.getLogger(__name__)
 
@@ -399,6 +402,9 @@ class CodeBuddyAgent:
         hint_level = max(1, min(3, hint_level))  # clamp 1–3
         logger.info("[Agen] get_progressive_hint level=%d level_siswa=%s", hint_level, student_level)
 
+        if space_demo_aktif():
+            return petunjuk_demo(code, error, hint_level)
+
         prompt = self._buat_prompt_hint(code, error, hint_level, student_level)
         try:
             hasil = await kirim_chat_tutor(prompt)
@@ -420,6 +426,8 @@ class CodeBuddyAgent:
         bahasa: str = "id",
     ) -> dict[str, Any]:
         """Panggil GemmaService.analyze_code dengan graceful fallback."""
+        if space_demo_aktif():
+            return umpan_balik_tutor(code, error)
         try:
             return await self._llm.analyze_code(
                 code, error=error, student_level=student_level, bahasa=bahasa

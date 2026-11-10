@@ -29,6 +29,7 @@ from demo_data import (
 
 _API     = os.getenv("CODEBUDDY_API", "http://localhost:8000")
 _TIMEOUT = 180.0
+_SPACE_DEMO = os.getenv("CODEBUDDY_SPACE_DEMO", "").strip().lower() in {"1", "true", "yes", "on"}
 
 LANGUAGE_OPTIONS = {
     "Indonesian": "id",
@@ -715,7 +716,10 @@ def demo_load_ocr():
     """Load demo image untuk OCR tab."""
     demo_img_path = get_demo_image_path()
     if not demo_img_path:
-        return None, alert("error", "Demo image tidak ditemukan. Pastikan file ada di folder Test Pic OCR/")
+        return None, alert(
+            "error",
+            "Demo image tidak ditemukan. Letakkan berkas di frontend/assets/demo_handwriting.jpg",
+        )
     return demo_img_path, alert("info", DEMO_INFO_MESSAGE)
 
 def demo_load_tutor_error():
@@ -783,7 +787,11 @@ def h_ocr(image):
             f'<div class="cb-bar-bg"><div class="cb-bar-fill" style="width:{pct}%"></div></div>'
             f'</div>'
         )
-        return d.get("code", ""), alert("success", f"Vision AI successfully extracted the code!{bar}")
+        if _SPACE_DEMO:
+            pesan_sukses = f"Hasil OCR demo Bahasa Indonesia siap.{bar}"
+        else:
+            pesan_sukses = f"Vision AI successfully extracted the code!{bar}"
+        return d.get("code", ""), alert("success", pesan_sukses)
     except Exception as e:
         return "", alert("error", f"Failed to process image: {str(e)[:200]}")
 
@@ -877,6 +885,14 @@ def h_voice_ask(audio_path, lang_label, level):
     bhs = lang_code(lang_label)
 
     # Tampilkan status loading segera agar UI tidak terasa beku
+    if _SPACE_DEMO:
+        catatan_proses = (
+            "Jawaban demo Bahasa Indonesia — tanpa Whisper, Gemma, atau TTS"
+        )
+    else:
+        catatan_proses = (
+            "Whisper STT → Gemma AI → TTS — butuh 15–60 detik"
+        )
     yield None, (
         '<div class="cb-loading" style="padding:12px 0;">'
         '<div class="cb-mascot-thinking">'
@@ -884,7 +900,7 @@ def h_voice_ask(audio_path, lang_label, level):
         '<div class="cb-loading-dots"><span></span><span></span><span></span></div>'
         '</div>'
         '<div class="cb-loading-text">CodeBot sedang mendengarkan &amp; berpikir...<br>'
-        '<small style="color:var(--c-text-3);">Whisper STT → Gemma AI → TTS — butuh 15–60 detik</small></div>'
+        f'<small style="color:var(--c-text-3);">{catatan_proses}</small></div>'
         '</div>'
     )
 
@@ -928,13 +944,16 @@ def h_tts(text, lang_label, gender):
     if not text.strip():
         return None, alert("info", "Please enter the text you want to be read aloud.")
     try:
-        content, _ = run(_post_raw("/api/audio/tts", json={
+        content, headers = run(_post_raw("/api/audio/tts", json={
             "teks": text, "bahasa": lang_code(lang_label), "gender": gender,
         }))
         import tempfile
         out = tempfile.mktemp(suffix=".mp3")
         with open(out, "wb") as f:
             f.write(content)
+        catatan = (headers or {}).get("x-demo-catatan")
+        if catatan:
+            return out, alert("info", catatan)
         return out, alert("success", "Audio ready — press ▶ to play.")
     except Exception as e:
         return None, alert("error", f"TTS failed: {str(e)[:200]}")
@@ -1369,7 +1388,7 @@ def h_insight():
 with gr.Blocks(title="CodeBuddy — AI Coding Tutor") as demo:
 
     # ── HERO ──────────────────────────────────────────────────────────────── #
-    gr.HTML("""
+    gr.HTML(f"""
     <div class="cb-hero">
       <div class="cb-hero-inner">
         <div class="cb-hero-top">
@@ -1383,7 +1402,7 @@ with gr.Blocks(title="CodeBuddy — AI Coding Tutor") as demo:
           <span class="cb-badge">🤖 AI-Powered</span>
           <span class="cb-badge">🌍 5 Bahasa Daerah</span>
           <span class="cb-badge">📸 OCR Tulisan Tangan</span>
-          <span class="cb-badge">🔒 100% Offline</span>
+          {"" if _SPACE_DEMO else '<span class="cb-badge">🔒 100% Offline</span>'}
           <span class="cb-badge">🎤 Mode Suara</span>
           <span class="cb-badge">👨‍🏫 Dashboard Guru</span>
         </div>
@@ -1412,6 +1431,19 @@ with gr.Blocks(title="CodeBuddy — AI Coding Tutor") as demo:
       </div>
     </div>
     """)
+
+    if _SPACE_DEMO:
+        gr.HTML(
+            '<div class="cb-alert cb-a-info" style="margin: 16px 0;">'
+            '<span class="cb-alert-icon">💡</span>'
+            '<div class="cb-alert-body">'
+            '<strong>Demo interaktif di Hugging Face Space.</strong> '
+            'Hasil OCR, tutor, latihan, insight guru, dan suara di halaman ini '
+            'adalah contoh kurasi berbahasa Indonesia supaya bisa dicoba di CPU gratis. '
+            'Tutor Gemma 4 lengkap, termasuk Vision, tetap berjalan secara offline '
+            'di komputer kamu lewat Ollama. Panduan lokal ada di RUN.md pada repositori GitHub.'
+            '</div></div>'
+        )
 
     # ── ONBOARDING BANNER ─────────────────────────────────────────────────── #
     gr.HTML(f'''
@@ -1830,13 +1862,23 @@ with gr.Blocks(title="CodeBuddy — AI Coding Tutor") as demo:
                     btn_dash.click(h_dashboard, [], [out_dash])
 
                 with gr.Tab("🤖 AI Insight"):
-                    gr.HTML(
-                        '<div class="cb-alert cb-a-warning" style="margin-bottom:16px;">'
-                        '<span class="cb-alert-icon">⏱️</span>'
-                        '<div class="cb-alert-body">The AI may take <strong>30–60 seconds</strong> '
-                        'to analyze the class data and generate recommendations.</div>'
-                        '</div>'
-                    )
+                    if _SPACE_DEMO:
+                        gr.HTML(
+                            '<div class="cb-alert cb-a-info" style="margin-bottom:16px;">'
+                            '<span class="cb-alert-icon">💡</span>'
+                            '<div class="cb-alert-body">Insight guru di demo ini tampil segera '
+                            'sebagai teks kurasi Bahasa Indonesia dari data dashboard. '
+                            'Tidak memanggil Gemma.</div>'
+                            '</div>'
+                        )
+                    else:
+                        gr.HTML(
+                            '<div class="cb-alert cb-a-warning" style="margin-bottom:16px;">'
+                            '<span class="cb-alert-icon">⏱️</span>'
+                            '<div class="cb-alert-body">The AI may take <strong>30–60 seconds</strong> '
+                            'to analyze the class data and generate recommendations.</div>'
+                            '</div>'
+                        )
                     btn_insight = gr.Button("🧠 Generate AI Insight", variant="primary")
                     out_insight = gr.HTML()
                     btn_insight.click(h_insight, [], [out_insight])
@@ -1867,6 +1909,8 @@ with gr.Blocks(title="CodeBuddy — AI Coding Tutor") as demo:
 # ============================================================================ #
 
 if __name__ == "__main__":
+    import tempfile
+
     tema = gr.themes.Soft(
         primary_hue="indigo",
         secondary_hue="violet",
@@ -1884,4 +1928,8 @@ if __name__ == "__main__":
         theme=tema,
         css=dapatkan_css_gradi(),
         head=FORCE_LIGHT_JS,
+        allowed_paths=[
+            str(Path(__file__).parent / "assets"),
+            str(Path(tempfile.gettempdir()) / "codebuddy_demo"),
+        ],
     )
