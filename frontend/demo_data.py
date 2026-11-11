@@ -63,8 +63,8 @@ rata = total / len(nilai)
 print("Rata-rata:", rata)
 """,
     "code_success": """# Program sapa nama
-nama = input("Siapa namamu? ")
-umur = int(input("Berapa umurmu? "))
+nama = "Andi"
+umur = 10
 
 print(f"Halo {nama}!")
 print(f"Kamu berumur {umur} tahun")
