@@ -1600,16 +1600,24 @@ with gr.Blocks(title="CodeBuddy — AI Coding Tutor") as demo:
                 [out_exec, out_fb, out_fix, out_status],
             )
             
-            # Connect demo buttons
+            # Load the curated sample, then analyse the values just written into the editor.
             btn_demo_tutor_error.click(
                 demo_load_tutor_error,
                 [],
-                [inp_code, inp_sid, inp_level, inp_ex_id, demo_tutor_status]
+                [inp_code, inp_sid, inp_level, inp_ex_id, demo_tutor_status],
+            ).then(
+                h_tutor,
+                [inp_code, inp_sid, inp_level, inp_ex_id, lang_global],
+                [out_exec, out_fb, out_fix, out_status],
             )
             btn_demo_tutor_success.click(
                 demo_load_tutor_success,
                 [],
-                [inp_code, inp_sid, inp_level, inp_ex_id, demo_tutor_status]
+                [inp_code, inp_sid, inp_level, inp_ex_id, demo_tutor_status],
+            ).then(
+                h_tutor,
+                [inp_code, inp_sid, inp_level, inp_ex_id, lang_global],
+                [out_exec, out_fb, out_fix, out_status],
             )
 
             gr.HTML('<div class="cb-divider"></div>')
